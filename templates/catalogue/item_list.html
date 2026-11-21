@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+    <div class="container py-4">
+        <h1 class="mb-4">{{ page_title }}</h1>
+
+        <div class="row g-4">
+            <!-- Category sidebar (left on desktop, top on mobile) -->
+            <aside class="col-lg-3" aria-labelledby="categories-heading">
+                <h2 id="categories-heading" class="h6 text-uppercase text-body-secondary">Categories</h2>
+                <nav class="list-group" aria-label="Categories">
+                    <a
+                        href="{% url 'catalogue:item_list' %}"
+                        class="list-group-item list-group-item-action fw-semibold{% if not category %} active{% endif %}"
+                        {% if not category %}aria-current="page"{% endif %}
+                        >All items</a
+                    >
+                    {% for top in categories %}
+                        {% include "catalogue/partials/category_link.html" with link=top %}
+                        {% for child in top.children.all %}
+                            {% include "catalogue/partials/category_link.html" with link=child sub=True %}
+                        {% endfor %}
+                    {% endfor %}
+                </nav>
+            </aside>
+
+            <!-- Item grid -->
+            <section class="col-lg-9" aria-labelledby="results-heading">
+                <h2 id="results-heading" class="visually-hidden">Items</h2>
+                <p class="small text-body-secondary">{{ items|length }} item{{ items|length|pluralize }}</p>
+                <div class="row row-cols-2 row-cols-md-3 g-3">
+                    {% for item in items %}
+                        {% include "catalogue/partials/item_card.html" %}
+                    {% empty %}
+                        <div class="col-12">
+                            <p class="text-body-secondary">No items in this category yet.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock %}

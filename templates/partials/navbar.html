@@ -23,7 +23,8 @@
 
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav ms-auto">
-                    {% include "partials/nav_link.html" with view_name="core:home" label="Home" %}
+                    {% include "partials/nav_link.html" with view_name="core:home" section="core" label="Home" %}
+                    {% include "partials/nav_link.html" with view_name="catalogue:item_list" section="catalogue" label="Catalogue" %}
                 </ul>
                 <button
                     id="theme-toggle"

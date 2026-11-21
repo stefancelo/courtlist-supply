@@ -1,0 +1,6 @@
+<a
+    href="{{ link.get_absolute_url }}"
+    class="list-group-item list-group-item-action{% if sub %} ps-4 small{% else %} fw-semibold{% endif %}{% if link == category %} active{% endif %}"
+    {% if link == category %}aria-current="page"{% endif %}
+    >{{ link.name }}</a
+>

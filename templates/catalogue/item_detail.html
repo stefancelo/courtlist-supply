@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}{{ item.name }}{% endblock %}
+{% block description %}{{ item.description|truncatewords:25 }}{% endblock %}
+
+{% block content %}
+    <div class="container py-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'catalogue:item_list' %}">Catalogue</a></li>
+                {% if item.category.parent %}
+                    <li class="breadcrumb-item">
+                        <a href="{{ item.category.parent.get_absolute_url }}">{{ item.category.parent.name }}</a>
+                    </li>
+                {% endif %}
+                <li class="breadcrumb-item">
+                    <a href="{{ item.category.get_absolute_url }}">{{ item.category.name }}</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">{{ item.name }}</li>
+            </ol>
+        </nav>
+
+        <div class="row g-4 g-lg-5">
+            <div class="col-md-6">
+                <img
+                    src="{{ item.image.url }}"
+                    alt="{{ item.name }}"
+                    class="img-fluid w-100 rounded-3 border item-card-img"
+                    width="800"
+                    height="800" />
+            </div>
+
+            <div class="col-md-6">
+                <p class="text-uppercase small fw-semibold text-orange mb-1">{{ item.brand.name }}</p>
+                <h1 class="h2">{{ item.name }}</h1>
+                <p class="fs-3 fw-semibold">€{{ item.price }}</p>
+                <p>{{ item.description|linebreaksbr }}</p>
+
+                <dl class="row small">
+                    <dt class="col-4 text-body-secondary">Colour</dt>
+                    <dd class="col-8">{{ item.get_colour_display }}</dd>
+
+                    <dt class="col-4 text-body-secondary">Sizes</dt>
+                    <dd class="col-8">{{ item.sizes.all|join:", "|default:"One size" }}</dd>
+
+                    <dt class="col-4 text-body-secondary">Availability</dt>
+                    <dd class="col-8">
+                        {% if item.stock %}In stock ({{ item.stock }}){% else %}Out of stock{% endif %}
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+{% endblock %}

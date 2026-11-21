@@ -186,14 +186,14 @@ h2.h4,
 
 /* Home feature cards and About team cards lift slightly on hover */
 section[aria-labelledby="features-heading"] .card,
-#team-grid .card {
+.item-card {
   transition:
     transform 0.2s,
     box-shadow 0.2s;
 }
 
 section[aria-labelledby="features-heading"] .card:hover,
-#team-grid .card:hover {
+.item-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 28px rgba(11, 31, 58, 0.14);
 }
@@ -212,12 +212,12 @@ section[aria-labelledby="features-heading"] .card .bi {
 /* Respect users who turn off animations in their operating system */
 @media (prefers-reduced-motion: reduce) {
   section[aria-labelledby="features-heading"] .card,
-  #team-grid .card {
+  .item-card {
     transition: none;
   }
 
   section[aria-labelledby="features-heading"] .card:hover,
-  #team-grid .card:hover {
+  .item-card:hover {
     transform: none;
   }
 }
@@ -282,4 +282,21 @@ main h1::after {
   text-transform: uppercase;
   opacity: 0.8;
   border-bottom: 1px solid var(--cl-orange);
+}
+
+/* Catalogue item images: always square, filled without stretching */
+.item-card-img {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+/* Active category in the sidebar uses the brand orange instead of Bootstrap blue */
+.list-group {
+  --bs-list-group-active-bg: var(--cl-orange);
+  --bs-list-group-active-border-color: var(--cl-orange);
+}
+
+/* Breadcrumb links in the brand orange instead of Bootstrap blue */
+.breadcrumb a {
+  color: var(--cl-orange);
 }
