@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <!-- Welcome section -->
+    <section class="hero py-5" data-bs-theme="dark" aria-labelledby="hero-heading">
+        <div class="container py-lg-4">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-7">
+                    <p class="text-uppercase small fw-semibold text-orange mb-2">Everything your matchday needs</p>
+                    <h1 id="hero-heading" class="display-5 fw-bold">Matchday supplies, delivered.</h1>
+                    <p class="lead text-body-secondary mb-4">
+                        CourtList Supply equips Euroleague operations staff. Game balls, shot clocks, court care,
+                        medical kits and staff apparel, ordered in one place.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="#features-heading" class="btn btn-orange btn-lg">See what we supply</a>
+                    </div>
+                </div>
+                <div class="col-lg-5 text-center d-none d-lg-block">
+                    <img src="{% static 'img/logodark.png' %}" alt="" width="220" height="220" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What the shop sells -->
+    <section class="container py-5" aria-labelledby="features-heading">
+        <h2 id="features-heading" class="h3 mb-4">What we supply</h2>
+        <div class="row g-4">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <i class="bi bi-dribbble fs-2 text-orange" aria-hidden="true"></i>
+                        <h3 class="h6 mt-3">Game equipment</h3>
+                        <p class="small text-body-secondary mb-0">
+                            Official-size balls, shot clocks and scoreboard parts for every game night.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <i class="bi bi-bucket fs-2 text-orange" aria-hidden="true"></i>
+                        <h3 class="h6 mt-3">Court care</h3>
+                        <p class="small text-body-secondary mb-0">
+                            Floor tape, dust mops and towels to keep the court safe and game-ready.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <i class="bi bi-bandaid fs-2 text-orange" aria-hidden="true"></i>
+                        <h3 class="h6 mt-3">Medical</h3>
+                        <p class="small text-body-secondary mb-0">
+                            First aid kits, ice packs and recovery gear for the medical staff.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <i class="bi bi-person-badge fs-2 text-orange" aria-hidden="true"></i>
+                        <h3 class="h6 mt-3">Staff apparel</h3>
+                        <p class="small text-body-secondary mb-0">
+                            Polos and jackets in your club colours for the whole operations team.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

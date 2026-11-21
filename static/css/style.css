@@ -1,0 +1,270 @@
+/* Brand orange, used through var(--cl-orange). Darker in light mode so orange text
+   meets contrast on white; the brighter logo orange is used in dark mode. */
+:root,
+[data-bs-theme="light"] {
+  --cl-orange: #c2410c;
+}
+
+[data-bs-theme="dark"] {
+  --cl-orange: #ff6500;
+}
+
+/* Orange text, e.g. "List" in the brand name */
+.text-orange {
+  color: var(--cl-orange);
+}
+
+/* Keeps the footer at the bottom of short pages: body is a full-height column
+   and <main> grows to fill the leftover space */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+/* Brand button. A darker orange than the logo so white text meets WCAG contrast (about 5:1). */
+.btn-orange {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #c2410c;
+  --bs-btn-border-color: #c2410c;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #9a3412;
+  --bs-btn-hover-border-color: #9a3412;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #7c2d12;
+  --bs-btn-active-border-color: #7c2d12;
+}
+
+/* Reserve space for the weather widget so the layout doesn't jump while it loads */
+#weather-output {
+  min-height: 7rem;
+  transition: opacity 0.2s;
+}
+
+/* Fixed-height box for charts; Chart.js fills it */
+.chart-box {
+  position: relative;
+  height: 280px;
+}
+
+/* Kanban board */
+.kanban-dropzone {
+  min-height: 8rem;
+}
+
+.kanban-card {
+  cursor: grab;
+}
+
+.kanban-card.dragging {
+  opacity: 0.5;
+}
+
+.kanban-column.drag-over {
+  outline: 2px dashed var(--cl-orange);
+  outline-offset: -4px;
+}
+
+/* Team member avatar: initials in a circle */
+.avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #be8015;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+/* Carousel slide: dark brand background so Bootstrap's white arrows and indicators stay visible */
+.process-slide {
+  background-color: #0b1f3a;
+  color: #fff;
+  min-height: 240px;
+  padding: 3rem 4rem 3.5rem;
+}
+
+.process-slide p {
+  max-width: 36rem;
+}
+
+/* Gameweek countdown boxes */
+.countdown-box {
+  min-width: 4.5rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--bs-tertiary-bg);
+}
+
+.countdown-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--bs-secondary-color);
+}
+
+/* Bootstrap keeps the outline-secondary grey the same in dark mode, which fails contrast
+   on dark backgrounds. A lighter grey in dark mode gives about 6.5:1 or more. */
+[data-bs-theme="dark"] .btn-outline-secondary {
+  --bs-btn-color: #adb5bd;
+  --bs-btn-border-color: #adb5bd;
+}
+
+/* The header wrapper is the sticky element: the navbar inside it can't stick on its own,
+   because a sticky element only sticks within its parent, and this div is its parent.
+   min-height reserves the navbar's space before layout.js inserts it (no layout shift). */
+#site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  min-height: 67px;
+}
+
+/* Mobile task list: the arrow on the "Description" button flips when expanded */
+.btn .bi-chevron-down {
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+.btn[aria-expanded="true"] .bi-chevron-down {
+  transform: rotate(180deg);
+}
+
+/* Typography: Inter for body text, Barlow Condensed for large headings (scoreboard feel) */
+:root {
+  --bs-body-font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+h1,
+.display-5,
+.display-6,
+h2.h3,
+h2.h4,
+.navbar-brand,
+.countdown-number {
+  font-family: "Barlow Condensed", "Inter", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* Home hero: orange glow, faint court lines and a navy gradient, dark in both themes.
+   Layers are listed top to bottom: the first one is drawn on top. */
+.hero {
+  color: var(--bs-body-color);
+  background:
+    radial-gradient(circle at 85% 35%, rgba(255, 101, 0, 0.35), transparent 45%),
+    url("../img/court.svg") center / cover no-repeat,
+    linear-gradient(135deg, #0b1f3a 0%, #13294b 60%, #0b1f3a 100%);
+}
+
+/* Cards: rounder corners and a soft shadow instead of a hard border */
+.card {
+  --bs-card-border-radius: 0.875rem;
+  --bs-card-inner-border-radius: calc(0.875rem - 1px);
+  --bs-card-border-color: var(--bs-border-color-translucent);
+  box-shadow:
+    0 1px 2px rgba(11, 31, 58, 0.06),
+    0 4px 16px rgba(11, 31, 58, 0.06);
+}
+
+[data-bs-theme="dark"] .card {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+/* Home feature cards and About team cards lift slightly on hover */
+section[aria-labelledby="features-heading"] .card,
+#team-grid .card {
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+section[aria-labelledby="features-heading"] .card:hover,
+#team-grid .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(11, 31, 58, 0.14);
+}
+
+/* Home feature icons sit on a soft orange tile */
+section[aria-labelledby="features-heading"] .card .bi {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  background-color: rgba(255, 101, 0, 0.12);
+}
+
+/* Respect users who turn off animations in their operating system */
+@media (prefers-reduced-motion: reduce) {
+  section[aria-labelledby="features-heading"] .card,
+  #team-grid .card {
+    transition: none;
+  }
+
+  section[aria-labelledby="features-heading"] .card:hover,
+  #team-grid .card:hover {
+    transform: none;
+  }
+}
+
+/* Thin orange line under each page title that fades out to the right */
+main h1::after {
+  content: "";
+  display: block;
+  width: 12rem;
+  height: 3px;
+  margin-top: 0.6rem;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--cl-orange), transparent);
+}
+
+/* Navbar: slightly transparent background with a blur ("frosted glass") */
+.site-navbar {
+  background-color: rgba(var(--bs-body-bg-rgb), 0.6);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* Current page link in brand orange */
+.navbar .nav-link {
+  position: relative;
+  font-weight: 500;
+}
+
+.navbar .nav-link.active {
+  color: var(--cl-orange);
+}
+
+/* On desktop, a short orange underline under the current page link */
+@media (min-width: 992px) {
+  .navbar .nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: var(--bs-navbar-nav-link-padding-x);
+    right: var(--bs-navbar-nav-link-padding-x);
+    bottom: 0.1rem;
+    height: 2px;
+    border-radius: 2px;
+    background-color: var(--cl-orange);
+  }
+}
+
+/* Skip link sits above the sticky navbar when it becomes visible */
+.skip-link {
+  z-index: 1100;
+}
