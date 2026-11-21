@@ -28,114 +28,11 @@
         <script src="{% static 'js/theme.js' %}"></script>
     </head>
     <body>
-        <header id="site-header">
-            <a
-                href="#main-content"
-                class="skip-link visually-hidden-focusable btn btn-orange position-absolute top-0 start-0 m-2"
-                >Skip to main content</a
-            >
-            <nav class="navbar navbar-expand-lg sticky-top border-bottom site-navbar" aria-label="Main navigation">
-                <div class="container">
-                    <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'core:home' %}">
-                        <img
-                            class="site-logo"
-                            src="{% static 'img/logolight.png' %}"
-                            data-logo-light="{% static 'img/logolight.png' %}"
-                            data-logo-dark="{% static 'img/logodark.png' %}"
-                            alt="CourtList Supply logo"
-                            width="40"
-                            height="40" />
-                        <span class="fw-bold">Court<span class="text-orange">List</span> Supply</span>
-                    </a>
-
-                    <button
-                        class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#mainNav"
-                        aria-controls="mainNav"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="mainNav">
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link{% if request.resolver_match.url_name == 'home' %} active{% endif %}"
-                                    href="{% url 'core:home' %}"
-                                    {% if request.resolver_match.url_name == 'home' %}aria-current="page"{% endif %}
-                                    >Home</a
-                                >
-                            </li>
-                        </ul>
-                        <button
-                            id="theme-toggle"
-                            class="btn btn-outline-secondary ms-lg-3 mt-2 mt-lg-0"
-                            type="button"
-                            aria-label="Switch to dark mode">
-                            <i class="bi bi-moon-stars" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                </div>
-            </nav>
-        </header>
+        {% include "partials/navbar.html" %}
 
         <main id="main-content">{% block content %}{% endblock %}</main>
 
-        <footer class="border-top bg-body-tertiary mt-5 py-4">
-            <div class="container">
-                <div class="row gy-3 align-items-center">
-                    <div class="col-md-4 text-center text-md-start">
-                        <a
-                            href="{% url 'core:home' %}"
-                            class="d-inline-flex align-items-center gap-2 text-decoration-none text-body">
-                            <img
-                                class="site-logo"
-                                src="{% static 'img/logolight.png' %}"
-                                data-logo-light="{% static 'img/logolight.png' %}"
-                                data-logo-dark="{% static 'img/logodark.png' %}"
-                                alt="CourtList Supply logo"
-                                width="32"
-                                height="32" />
-                            <span class="fw-bold">Court<span class="text-orange">List</span> Supply</span>
-                        </a>
-                        <p class="small text-body-secondary mb-0 mt-1">Everything your matchday needs</p>
-                    </div>
-
-                    <div class="col-md-4 text-center">
-                        <a href="mailto:supply@courtlist.com" class="link-body-emphasis">
-                            <i class="bi bi-envelope me-1" aria-hidden="true"></i>supply@courtlist.com
-                        </a>
-                    </div>
-
-                    <div class="col-md-4 text-center text-md-end">
-                        <div class="d-inline-flex gap-3">
-                            <a
-                                href="https://github.com/stefancelo/courtlist-supply"
-                                class="link-body-emphasis fs-5"
-                                target="_blank"
-                                rel="noopener"
-                                aria-label="CourtList Supply on GitHub">
-                                <i class="bi bi-github" aria-hidden="true"></i>
-                            </a>
-                            <a
-                                href="https://instagram.com/esbekal"
-                                class="link-body-emphasis fs-5"
-                                target="_blank"
-                                rel="noopener"
-                                aria-label="CourtList on Instagram">
-                                <i class="bi bi-instagram" aria-hidden="true"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <p class="text-center small text-body-secondary mt-4 mb-0">
-                    &copy; {% now "Y" %} CourtList Supply. All rights reserved.
-                </p>
-            </div>
-        </footer>
+        {% include "partials/footer.html" %}
 
         <script
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

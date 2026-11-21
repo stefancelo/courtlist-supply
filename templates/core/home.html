@@ -29,51 +29,18 @@
     <!-- What the shop sells -->
     <section class="container py-5" aria-labelledby="features-heading">
         <h2 id="features-heading" class="h3 mb-4">What we supply</h2>
-        <div class="row g-4">
-            <div class="col-sm-6 col-lg-3">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <i class="bi bi-dribbble fs-2 text-orange" aria-hidden="true"></i>
-                        <h3 class="h6 mt-3">Game equipment</h3>
-                        <p class="small text-body-secondary mb-0">
-                            Official-size balls, shot clocks and scoreboard parts for every game night.
-                        </p>
+                <div class="row g-4">
+            {% for feature in features %}
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <i class="bi {{ feature.icon }} fs-2 text-orange" aria-hidden="true"></i>
+                            <h3 class="h6 mt-3">{{ feature.title }}</h3>
+                            <p class="small text-body-secondary mb-0">{{ feature.text }}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <i class="bi bi-bucket fs-2 text-orange" aria-hidden="true"></i>
-                        <h3 class="h6 mt-3">Court care</h3>
-                        <p class="small text-body-secondary mb-0">
-                            Floor tape, dust mops and towels to keep the court safe and game-ready.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <i class="bi bi-bandaid fs-2 text-orange" aria-hidden="true"></i>
-                        <h3 class="h6 mt-3">Medical</h3>
-                        <p class="small text-body-secondary mb-0">
-                            First aid kits, ice packs and recovery gear for the medical staff.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <i class="bi bi-person-badge fs-2 text-orange" aria-hidden="true"></i>
-                        <h3 class="h6 mt-3">Staff apparel</h3>
-                        <p class="small text-body-secondary mb-0">
-                            Polos and jackets in your club colours for the whole operations team.
-                        </p>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </section>
 {% endblock %}

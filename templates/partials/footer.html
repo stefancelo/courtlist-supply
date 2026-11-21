@@ -1,0 +1,44 @@
+<footer class="border-top bg-body-tertiary mt-5 py-4">
+    <div class="container">
+        <div class="row gy-3 align-items-center">
+            <div class="col-md-4 text-center text-md-start">
+                <a
+                    href="{% url 'core:home' %}"
+                    class="d-inline-flex align-items-center gap-2 text-decoration-none text-body">
+                    {% include "partials/logo.html" with size=32 %}
+                </a>
+                <p class="small text-body-secondary mb-0 mt-1">Everything your matchday needs</p>
+            </div>
+
+            <div class="col-md-4 text-center">
+                <a href="mailto:supply@courtlist.com" class="link-body-emphasis">
+                    <i class="bi bi-envelope me-1" aria-hidden="true"></i>supply@courtlist.com
+                </a>
+            </div>
+
+            <div class="col-md-4 text-center text-md-end">
+                <div class="d-inline-flex gap-3">
+                    <a
+                        href="https://github.com/stefancelo/courtlist-supply"
+                        class="link-body-emphasis fs-5"
+                        target="_blank"
+                        rel="noopener"
+                        aria-label="CourtList Supply on GitHub">
+                        <i class="bi bi-github" aria-hidden="true"></i>
+                    </a>
+                    <a
+                        href="https://instagram.com/esbekal"
+                        class="link-body-emphasis fs-5"
+                        target="_blank"
+                        rel="noopener"
+                        aria-label="CourtList on Instagram">
+                        <i class="bi bi-instagram" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <p class="text-center small text-body-secondary mt-4 mb-0">
+            &copy; {% now "Y" %} CourtList Supply. All rights reserved.
+        </p>
+    </div>
+</footer>

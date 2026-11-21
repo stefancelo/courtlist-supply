@@ -1,0 +1,38 @@
+<header id="site-header">
+    <a
+        href="#main-content"
+        class="skip-link visually-hidden-focusable btn btn-orange position-absolute top-0 start-0 m-2"
+        >Skip to main content</a
+    >
+    <nav class="navbar navbar-expand-lg sticky-top border-bottom site-navbar" aria-label="Main navigation">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'core:home' %}">
+                {% include "partials/logo.html" with size=40 %}
+            </a>
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNav"
+                aria-controls="mainNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav ms-auto">
+                    {% include "partials/nav_link.html" with view_name="core:home" label="Home" %}
+                </ul>
+                <button
+                    id="theme-toggle"
+                    class="btn btn-outline-secondary ms-lg-3 mt-2 mt-lg-0"
+                    type="button"
+                    aria-label="Switch to dark mode">
+                    <i class="bi bi-moon-stars" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+</header>

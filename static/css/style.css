@@ -268,3 +268,18 @@ main h1::after {
 .skip-link {
   z-index: 1100;
 }
+
+/* Sub-brand line under the CourtList name: small, faded, spaced capitals
+   with a thin orange underline, e.g. "SUPPLY" */
+.brand-sub {
+  align-self: center;
+  margin-top: 0.25rem;
+  padding-bottom: 0.1rem;
+  padding-left: 0.35em;
+  font-size: 0.5em;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  border-bottom: 1px solid var(--cl-orange);
+}
