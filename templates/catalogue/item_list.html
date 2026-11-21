@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ page_title }}{% endblock %}
 
@@ -7,39 +8,65 @@
         <h1 class="mb-4">{{ page_title }}</h1>
 
         <div class="row g-4">
-            <!-- Category sidebar (left on desktop, top on mobile) -->
-            <aside class="col-lg-3" aria-labelledby="categories-heading">
-                <h2 id="categories-heading" class="h6 text-uppercase text-body-secondary">Categories</h2>
-                <nav class="list-group" aria-label="Categories">
-                    <a
-                        href="{% url 'catalogue:item_list' %}"
-                        class="list-group-item list-group-item-action fw-semibold{% if not category %} active{% endif %}"
-                        {% if not category %}aria-current="page"{% endif %}
-                        >All items</a
-                    >
-                    {% for top in categories %}
-                        {% include "catalogue/partials/category_link.html" with link=top %}
-                        {% for child in top.children.all %}
-                            {% include "catalogue/partials/category_link.html" with link=child sub=True %}
+            <!-- Sidebar: categories and filters, each panel can be shown or hidden -->
+            <aside class="col-lg-3">
+                {% include "catalogue/partials/panel_toggle.html" with target="category-panel" label="Categories" %}
+                <div class="collapse show mb-4 sidebar-panel" id="category-panel">
+                    <nav class="list-group" aria-label="Categories">
+                        <a
+                            href="{% url 'catalogue:item_list' %}"
+                            class="list-group-item list-group-item-action fw-semibold{% if not category %} active{% endif %}"
+                            {% if not category %}aria-current="page"{% endif %}
+                            >All items</a
+                        >
+                        {% for top in categories %}
+                            {% include "catalogue/partials/category_link.html" with link=top %}
+                            {% for child in top.children.all %}
+                                {% include "catalogue/partials/category_link.html" with link=child sub=True %}
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                </nav>
+                    </nav>
+                </div>
+
+                {% include "catalogue/partials/panel_toggle.html" with target="filter-panel" label="Filters" %}
+                <div class="collapse show sidebar-panel" id="filter-panel">
+                    <form method="get" novalidate>
+                        {% for field in filter_form %}
+                            <div class="mb-2">
+                                <label for="{{ field.id_for_label }}" class="form-label small mb-1">{{ field.label }}</label>
+                                {{ field }}
+                                {% for error in field.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-orange w-100 mt-2">Apply filters</button>
+                        <a href="{{ request.path }}" class="btn btn-link w-100 mt-1">Clear filters</a>
+                    </form>
+                </div>
             </aside>
 
             <!-- Item grid -->
             <section class="col-lg-9" aria-labelledby="results-heading">
                 <h2 id="results-heading" class="visually-hidden">Items</h2>
-                <p class="small text-body-secondary">{{ items|length }} item{{ items|length|pluralize }}</p>
-                <div class="row row-cols-2 row-cols-md-3 g-3">
+                <p class="small text-body-secondary" aria-live="polite">
+                    {{ items|length }} item{{ items|length|pluralize }}
+                    {% if request.GET.q %}for "{{ request.GET.q }}"{% endif %}
+                </p>
+                <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3">
                     {% for item in items %}
                         {% include "catalogue/partials/item_card.html" %}
                     {% empty %}
                         <div class="col-12">
-                            <p class="text-body-secondary">No items in this category yet.</p>
+                            <p class="text-body-secondary">No items match. Try fewer filters.</p>
                         </div>
                     {% endfor %}
                 </div>
             </section>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/catalogue.js' %}"></script>
 {% endblock %}

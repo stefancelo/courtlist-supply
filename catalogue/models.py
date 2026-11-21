@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.urls import reverse
@@ -98,3 +99,27 @@ class Item(models.Model):
 
     def get_absolute_url(self):
         return reverse("catalogue:item_detail", args=[self.slug])
+    
+    
+
+class SearchQuery(models.Model):
+    """One search typed into the catalogue. Feeds the "most searched terms" chart
+    on the analytics dashboard and the recommender."""
+
+    term = models.CharField(max_length=100)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="searches",
+    )
+    results_count = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name_plural = "search queries"
+
+    def __str__(self):
+        return self.term

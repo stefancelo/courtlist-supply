@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Brand, Category, Item
+from .forms import ItemFilterForm
+from .models import Brand, Category, Item, SearchQuery
 
 
 class CategoryModelTests(TestCase):
@@ -44,3 +45,20 @@ class CatalogueViewTests(TestCase):
         self.ball.save()
         response = self.client.get(reverse("catalogue:item_detail", args=["test-ball"]))
         self.assertEqual(response.status_code, 404)
+        
+    
+    def test_search_matches_brand_and_is_saved(self):
+        response = self.client.get(reverse("catalogue:item_list"), {"q": "Molten"})
+        self.assertContains(response, "Test ball")
+        self.assertEqual(SearchQuery.objects.get().term, "molten")
+        
+        
+
+
+class ItemFilterFormTests(TestCase):
+    """Checks the advanced filter form's own validation."""
+
+    def test_min_price_above_max_price_is_rejected(self):
+        form = ItemFilterForm({"min_price": "50", "max_price": "10"})
+        self.assertFalse(form.is_valid())
+        self.assertIn("max_price", form.errors)
