@@ -25,6 +25,7 @@
                 <ul class="navbar-nav ms-auto">
                     {% include "partials/nav_link.html" with view_name="core:home" label="Home" %}
                     {% include "partials/nav_link.html" with view_name="core:about" label="About" %}
+                    {% include "partials/nav_link.html" with view_name="core:contact" label="Contact" %}
                     {% include "partials/nav_link.html" with view_name="catalogue:item_list" section="catalogue" label="Shop" %}
                 </ul>
                 {% if request.resolver_match.namespace == "catalogue" %}

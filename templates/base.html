@@ -30,8 +30,11 @@
     <body>
         {% include "partials/navbar.html" %}
 
-        <main id="main-content">{% block content %}{% endblock %}</main>
-
+        <main id="main-content">
+            {% include "partials/messages.html" %}
+            {% block content %}{% endblock %}
+        </main>
+        
         {% include "partials/footer.html" %}
 
         <script

@@ -1,4 +1,7 @@
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import redirect, render
+
+from .forms import ContactForm
 
 # The four areas of the site, shown as cards on the home page
 FEATURES = [
@@ -67,3 +70,22 @@ def about(request):
     team = [dict(member, initials=get_initials(member["name"])) for member in TEAM]
     context = {"features": ABOUT_FEATURES, "team": team, "milestones": MILESTONES}
     return render(request, "core/about.html", context)
+
+
+
+def contact(request):
+    """Contact page. GET shows an empty form; POST checks it, saves the message
+    and redirects back with a confirmation (Post/Redirect/Get)."""
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            message = form.save()
+            messages.success(
+                request,
+                f"Thanks, {message.name}. We received your message and will reply to {message.email}.",
+            )
+            return redirect("core:contact")
+    else:
+        form = ContactForm()
+
+    return render(request, "core/contact.html", {"form": form})
