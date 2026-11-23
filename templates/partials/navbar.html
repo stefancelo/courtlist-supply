@@ -23,9 +23,29 @@
 
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav ms-auto">
-                    {% include "partials/nav_link.html" with view_name="core:home" section="core" label="Home" %}
-                    {% include "partials/nav_link.html" with view_name="catalogue:item_list" section="catalogue" label="Catalogue" %}
+                    {% include "partials/nav_link.html" with view_name="core:home" label="Home" %}
+                    {% include "partials/nav_link.html" with view_name="core:about" label="About" %}
+                    {% include "partials/nav_link.html" with view_name="catalogue:item_list" section="catalogue" label="Shop" %}
                 </ul>
+                {% if request.resolver_match.namespace == "catalogue" %}
+                <form
+                    class="d-flex ms-lg-3 mt-2 mt-lg-0"
+                    role="search"
+                    action="{% url 'catalogue:item_list' %}"
+                    method="get">
+                    <label for="nav-search" class="visually-hidden">Search the catalogue</label>
+                    <input
+                        id="nav-search"
+                        class="form-control"
+                        type="search"
+                        name="q"
+                        placeholder="Search items or brands"
+                        value="{{ request.GET.q }}" />
+                    <button class="btn btn-orange ms-1" type="submit" aria-label="Search">
+                        <i class="bi bi-search" aria-hidden="true"></i>
+                    </button>
+                </form>
+                {% endif %}
                 <button
                     id="theme-toggle"
                     class="btn btn-outline-secondary ms-lg-3 mt-2 mt-lg-0"

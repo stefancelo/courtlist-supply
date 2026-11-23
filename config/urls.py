@@ -22,7 +22,7 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
-    path('catalogue/', include('catalogue.urls')),
+    path('shop/', include('catalogue.urls')),
 ]
 
 # While developing (DEBUG on), Django itself serves uploaded images from the media folder.

@@ -4,10 +4,12 @@
     src="{% static 'img/logolight.png' %}"
     data-logo-light="{% static 'img/logolight.png' %}"
     data-logo-dark="{% static 'img/logodark.png' %}"
-    alt="CourtList Supply logo"
+    alt="CourtList logo"
     width="{{ size }}"
     height="{{ size }}" />
 <span class="d-flex flex-column lh-1">
     <span class="fw-bold">Court<span class="text-orange">List</span></span>
-    <span class="brand-sub">Supply</span>
+    {% if request.resolver_match.namespace == "catalogue" %}
+        <span class="brand-sub">Supply</span>
+    {% endif %}
 </span>

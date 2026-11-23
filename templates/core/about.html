@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+    <div class="container py-4">
+        <h1 class="mb-4">About CourtList</h1>
+
+        <!-- About the site -->
+        <section class="row g-4 mb-5" aria-labelledby="purpose-heading">
+            <div class="col-lg-7">
+                <h2 id="purpose-heading" class="h4">Why we built it</h2>
+                <p>
+                    A Euroleague game night involves dozens of small jobs: referee crews to confirm, press passes to
+                    approve, shot clocks to test and supplies to order. Meanwhile, fans want to call the result and
+                    argue about it.
+                </p>
+                <p class="mb-0">
+                    CourtList brings both sides together. Fans predict every game and discuss it, while our operations
+                    staff track their matchday tasks on a Kanban board and restock from our own supply shop.
+                </p>
+            </div>
+            <div class="col-lg-5">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="h6 mb-3">Features</h2>
+                        <ul class="list-unstyled small mb-0">
+                            {% for feature in features %}
+                                <li class="{% if not forloop.last %}mb-2{% endif %}">
+                                    <i class="bi bi-check2 text-success me-2" aria-hidden="true"></i>{{ feature }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team members -->
+        <section class="mb-5" aria-labelledby="team-heading">
+            <h2 id="team-heading" class="h4 mb-3">The team</h2>
+            <div class="row g-4">
+                {% for member in team %}
+                    <div class="col-sm-6 col-lg-3">
+                        <article class="card h-100 text-center">
+                            <div class="card-body">
+                                <div class="avatar mx-auto mb-3" aria-hidden="true">{{ member.initials }}</div>
+                                <h3 class="h6 mb-1">{{ member.name }}</h3>
+                                <p class="small fw-semibold text-body-secondary mb-2">{{ member.role }}</p>
+                                <p class="small text-body-secondary mb-0">{{ member.bio }}</p>
+                            </div>
+                        </article>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- How CourtList was built -->
+        <section aria-labelledby="process-heading">
+            <h2 id="process-heading" class="h4 mb-3">How CourtList was built</h2>
+            <div
+                id="process-carousel"
+                class="carousel slide rounded overflow-hidden"
+                data-bs-ride="carousel"
+                data-bs-interval="6000">
+                <div class="carousel-indicators">
+                    {% for step in milestones %}
+                        <button
+                            type="button"
+                            data-bs-target="#process-carousel"
+                            data-bs-slide-to="{{ forloop.counter0 }}"
+                            {% if forloop.first %}class="active" aria-current="true"{% endif %}
+                            aria-label="Step {{ forloop.counter }}"></button>
+                    {% endfor %}
+                </div>
+                <div class="carousel-inner">
+                    {% for step in milestones %}
+                        <div class="carousel-item{% if forloop.first %} active{% endif %}">
+                            <div class="process-slide text-center">
+                                <i class="bi {{ step.icon }} display-5" aria-hidden="true"></i>
+                                <h3 class="h5 mt-3">{{ step.title }}</h3>
+                                <p class="mb-0 mx-auto">{{ step.text }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#process-carousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous step</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#process-carousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next step</span>
+                </button>
+            </div>
+        </section>
+    </div>
+{% endblock %}
