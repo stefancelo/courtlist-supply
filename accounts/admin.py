@@ -7,5 +7,5 @@ from .models import User
 @admin.register(User)
 class CourtListUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
-        ("Club details", {"fields": ("club", "job_title", "phone")}),
+        ("Club details", {"fields": ("club", "phone_prefix", "phone")}),
     )

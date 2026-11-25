@@ -1,5 +1,9 @@
+from django.contrib.auth.models import Group
 from django.test import TestCase
 from django.urls import reverse
+
+from accounts.models import User
+from accounts.roles import STAFF_GROUP
 
 from .forms import ItemFilterForm
 from .models import Brand, Category, Item, SearchQuery
@@ -35,6 +39,24 @@ class CatalogueViewTests(TestCase):
             image="items/test.png",
             stock=5,
         )
+        cls.staff = User.objects.create_user(username="staff", password="Test-pass-2026")
+        cls.staff.groups.add(Group.objects.create(name=STAFF_GROUP))
+        cls.fan = User.objects.create_user(username="fan", password="Test-pass-2026")
+
+    def setUp(self):
+        # Every test starts logged in as staff, because the shop is staff-only
+        self.client.force_login(self.staff)
+
+    def test_visitor_is_sent_to_login(self):
+        self.client.logout()
+        response = self.client.get(reverse("catalogue:item_list"))
+        login_url = reverse("accounts:login")
+        self.assertRedirects(response, f"{login_url}?next={reverse('catalogue:item_list')}")
+
+    def test_fan_is_forbidden(self):
+        self.client.force_login(self.fan)
+        response = self.client.get(reverse("catalogue:item_list"))
+        self.assertEqual(response.status_code, 403)
 
     def test_parent_category_includes_subcategory_items(self):
         response = self.client.get(reverse("catalogue:category", args=["game-equipment"]))

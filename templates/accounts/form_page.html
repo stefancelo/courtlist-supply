@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <h1 class="mb-2">{% block heading %}{% endblock %}</h1>
+                <p class="text-body-secondary mb-4">{% block intro %}{% endblock %}</p>
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {% include "partials/form_fields.html" %}
+                            <button type="submit" class="btn btn-orange w-100">{% block button %}{% endblock %}</button>
+                        </form>
+                    </div>
+                </div>
+
+                {% block below %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="{% static 'js/password-toggle.js' %}"></script>
+    <script src="{% static 'js/phone-prefix.js' %}"></script>
+{% endblock %}

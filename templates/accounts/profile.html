@@ -1,0 +1,9 @@
+{% extends "accounts/form_page.html" %}
+
+{% block title %}Your profile{% endblock %}
+{% block heading %}Your profile{% endblock %}
+{% block intro %}
+    Logged in as <strong>{{ user.username }}</strong>,
+    {% if user.is_superuser %}admin{% elif is_courtlist_staff %}CourtList staff{% else %}fan{% endif %}.
+{% endblock %}
+{% block button %}Save changes{% endblock %}

@@ -26,7 +26,9 @@
                     {% include "partials/nav_link.html" with view_name="core:home" label="Home" %}
                     {% include "partials/nav_link.html" with view_name="core:about" label="About" %}
                     {% include "partials/nav_link.html" with view_name="core:contact" label="Contact" %}
-                    {% include "partials/nav_link.html" with view_name="catalogue:item_list" section="catalogue" label="Shop" %}
+                    {% if is_courtlist_staff %}
+                        {% include "partials/nav_link.html" with view_name="catalogue:item_list" section="catalogue" label="Shop" %}
+                    {% endif %}
                 </ul>
                 {% if request.resolver_match.namespace == "catalogue" %}
                 <form
@@ -47,6 +49,7 @@
                     </button>
                 </form>
                 {% endif %}
+                {% include "partials/account_menu.html" %}
                 <button
                     id="theme-toggle"
                     class="btn btn-outline-secondary ms-lg-3 mt-2 mt-lg-0"

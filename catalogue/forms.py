@@ -1,10 +1,12 @@
 from django import forms
 from django.db.models import Q
 
+from core.forms import BootstrapFormMixin
+
 from .models import Brand, Item, Size
 
 
-class ItemFilterForm(forms.Form):
+class ItemFilterForm(BootstrapFormMixin, forms.Form):
     """The catalogue's search box and advanced filters.
     Sent with GET, so the filters appear in the page address (?q=molten&brand=nike)
     and a filtered page can be bookmarked or shared."""
@@ -32,13 +34,6 @@ class ItemFilterForm(forms.Form):
         queryset=Size.objects.all(), required=False, empty_label="Any size", to_field_name="name"
     )
     sort = forms.ChoiceField(label="Sort by", required=False, choices=SORT_CHOICES)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Bootstrap classes for every field, set once here instead of repeating them in the template
-        for field in self.fields.values():
-            is_dropdown = isinstance(field.widget, forms.Select)
-            field.widget.attrs["class"] = "form-select" if is_dropdown else "form-control"
 
     def clean(self):
         """Checks the price range makes sense (min not above max)."""

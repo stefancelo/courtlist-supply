@@ -1,4 +1,5 @@
 from django.db.models import Q
+from accounts.roles import staff_required
 from django.shortcuts import get_object_or_404, render
 
 from .forms import ItemFilterForm
@@ -15,7 +16,7 @@ def record_search(request, term, items):
             results_count=items.count(),
         )
 
-
+@staff_required
 def item_list(request, slug=None):
     """Catalogue page. Shows all active items or one category's items,
     narrowed down by the search box and the advanced filters.
@@ -46,7 +47,7 @@ def item_list(request, slug=None):
     }
     return render(request, "catalogue/item_list.html", context)
 
-
+@staff_required
 def item_detail(request, slug):
     """One item's page: image, price, brand, colour, sizes and stock."""
     item = get_object_or_404(

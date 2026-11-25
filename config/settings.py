@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'accounts',
     'core',
     'catalogue',
+    'gameweek',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -70,6 +71,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "accounts.context_processors.roles",
             ],
         },
     },
@@ -134,3 +136,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Login and logout: where Django sends people
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'core:home'
+LOGOUT_REDIRECT_URL = 'core:home'

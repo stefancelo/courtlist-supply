@@ -1,0 +1,12 @@
+{% extends "accounts/form_page.html" %}
+
+{% block title %}Create an account{% endblock %}
+{% block heading %}Create a fan account{% endblock %}
+{% block intro %}Fans can vote on every game and join the discussion. Staff accounts are set up by the admin.{% endblock %}
+{% block button %}Create account{% endblock %}
+
+{% block below %}
+    <p class="text-center small mt-3">
+        Already have an account? <a href="{% url 'accounts:login' %}">Log in</a>
+    </p>
+{% endblock %}

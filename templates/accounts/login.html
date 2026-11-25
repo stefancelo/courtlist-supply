@@ -1,0 +1,12 @@
+{% extends "accounts/form_page.html" %}
+
+{% block title %}Log in{% endblock %}
+{% block heading %}Log in{% endblock %}
+{% block intro %}Log in to vote and join the discussion. Staff also reach their tasks and the shop.{% endblock %}
+{% block button %}Log in{% endblock %}
+
+{% block below %}
+    <p class="text-center small mt-3">
+        New to CourtList? <a href="{% url 'accounts:register' %}">Create a fan account</a>
+    </p>
+{% endblock %}

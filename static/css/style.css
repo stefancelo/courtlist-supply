@@ -300,3 +300,9 @@ main h1::after {
 .breadcrumb a {
   color: var(--cl-orange);
 }
+
+/* Phone number: the country-code dropdown sits inside the same box, on the left,
+   with a fixed narrow width; the number box takes the rest */
+.input-group > .form-select.phone-prefix {
+  flex: 0 0 6rem;
+}
