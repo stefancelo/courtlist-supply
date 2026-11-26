@@ -142,3 +142,23 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'core:home'
 LOGOUT_REDIRECT_URL = 'core:home'
+
+
+# Static files for the live server: "python manage.py collectstatic" copies all CSS, JS
+# and images into this folder, and the web server serves them from there
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Sites allowed to submit forms over HTTPS, e.g. https://courtlist.eu.pythonanywhere.com
+CSRF_TRUSTED_ORIGINS = [
+    origin for origin in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",") if origin
+]
+
+# HTTPS security for the live site only. On the laptop (http://127.0.0.1) these stay off,
+# because they would force https, which the development server doesn't have.
+if os.environ.get("SECURE_SITE", "False") == "True":
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 3600
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
