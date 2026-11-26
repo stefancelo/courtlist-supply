@@ -47,7 +47,7 @@ TEAM = [
 
 # Steps of the build, shown in the About page carousel
 MILESTONES = [
-    {"icon": "bi-lightbulb", "title": "1. From midterm to Django", "text": "The front-end CourtList task app grew into a full Django 5.2 site with a real database."},
+    {"icon": "bi-lightbulb", "title": "1. Built around the Euroleague", "text": "The 20 clubs of the 2026-27 season are the base for every fixture, prediction and user profile."},
     {"icon": "bi-layout-text-window", "title": "2. Shared templates", "text": "One base template with blocks and small partials, so no page repeats the layout."},
     {"icon": "bi-database", "title": "3. Database models", "text": "Teams, fixtures, predictions, comments, tasks, items, orders and ratings, all linked together."},
     {"icon": "bi-shield-lock", "title": "4. Roles and security", "text": "Visitors, fans, staff and admins each see exactly what they are allowed to."},
