@@ -325,3 +325,13 @@ main h1::after {
   width: 100%;
   background: var(--cl-orange);
 }
+
+/* Cart: narrow quantity boxes, and an orange count badge on the navbar cart icon */
+.quantity-input {
+  max-width: 5.5rem;
+}
+
+.badge-orange {
+  background-color: var(--cl-orange);
+  color: #fff;
+}

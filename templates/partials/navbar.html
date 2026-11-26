@@ -26,8 +26,17 @@
                     {% include "partials/nav_link.html" with view_name="core:home" label="Home" %}
                     {% include "partials/nav_link.html" with view_name="core:about" label="About" %}
                     {% include "partials/nav_link.html" with view_name="core:contact" label="Contact" %}
-                    {% if is_courtlist_staff %}
+                                        {% if is_courtlist_staff %}
                         {% include "partials/nav_link.html" with view_name="catalogue:item_list" section="catalogue" label="Shop" %}
+                        <li class="nav-item">
+                            <a
+                                class="nav-link{% if request.resolver_match.view_name == 'orders:cart' %} active{% endif %}"
+                                href="{% url 'orders:cart' %}"
+                                aria-label="Cart, {{ cart_count }} item{{ cart_count|pluralize }}">
+                                <i class="bi bi-cart3" aria-hidden="true"></i>
+                                <span id="cart-count" class="badge rounded-pill badge-orange">{{ cart_count }}</span>
+                            </a>
+                        </li>
                     {% endif %}
                 </ul>
                 {% if request.resolver_match.namespace == "catalogue" %}

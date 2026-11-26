@@ -43,11 +43,44 @@
                     <dt class="col-4 text-body-secondary">Sizes</dt>
                     <dd class="col-8">{{ item.sizes.all|join:", "|default:"One size" }}</dd>
 
-                    <dt class="col-4 text-body-secondary">Availability</dt>
+                                        <dt class="col-4 text-body-secondary">Availability</dt>
                     <dd class="col-8">
                         {% if item.stock %}In stock ({{ item.stock }}){% else %}Out of stock{% endif %}
                     </dd>
                 </dl>
+
+                <form method="post" action="{% url 'orders:cart_add' item.pk %}" class="row g-2 align-items-end">
+                    {% csrf_token %}
+                    {% with sizes=item.sizes.all %}
+                        {% if sizes %}
+                            <div class="col-6 col-sm-4">
+                                <label for="cart-size" class="form-label small">Size</label>
+                                <select id="cart-size" name="size" class="form-select" required>
+                                    <option value="">Choose</option>
+                                    {% for size in sizes %}
+                                        <option value="{{ size.name }}">{{ size.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    <div class="col-6 col-sm-3">
+                        <label for="cart-quantity" class="form-label small">Quantity</label>
+                        <input
+                            id="cart-quantity"
+                            type="number"
+                            name="quantity"
+                            value="1"
+                            min="1"
+                            max="{{ item.stock }}"
+                            class="form-control" />
+                    </div>
+                    <div class="col-12 col-sm-5">
+                        <button type="submit" class="btn btn-orange w-100" {% if not item.stock %}disabled{% endif %}>
+                            <i class="bi bi-cart-plus me-1" aria-hidden="true"></i>Add to cart
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

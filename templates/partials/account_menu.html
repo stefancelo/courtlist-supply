@@ -9,6 +9,9 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Profile</a></li>
+            {% if is_courtlist_staff %}
+                <li><a class="dropdown-item" href="{% url 'orders:list' %}">My orders</a></li>
+            {% endif %}
             {% if user.is_superuser %}
                 <li><a class="dropdown-item" href="{% url 'admin:index' %}">Django admin</a></li>
             {% endif %}

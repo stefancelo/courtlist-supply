@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Order #{{ order.pk }}{% endblock %}
+
+{% block content %}
+    <div class="container py-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'orders:list' %}">Your orders</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Order #{{ order.pk }}</li>
+            </ol>
+        </nav>
+
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+            <div>
+                <h1 class="mb-1">Order #{{ order.pk }}</h1>
+                <p class="text-body-secondary mb-0">Placed {{ order.created_at|date:"j M Y, H:i" }}</p>
+            </div>
+            <form method="post" action="{% url 'orders:reorder' order.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-orange">
+                    <i class="bi bi-arrow-repeat me-1" aria-hidden="true"></i>Reorder
+                </button>
+            </form>
+        </div>
+
+        <ul class="list-group mb-3">
+            {% for line in order.lines.all %}
+                <li class="list-group-item d-flex flex-wrap justify-content-between gap-2 py-3">
+                    <span>
+                        <a href="{{ line.item.get_absolute_url }}" class="fw-semibold">{{ line.item.name }}</a>
+                        <span class="d-block small text-body-secondary">
+                            {% if line.size %}Size {{ line.size }} · {% endif %}{{ line.quantity }} x €{{ line.unit_price }}
+                        </span>
+                    </span>
+                    <span class="fw-semibold">€{{ line.line_total }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <p class="text-end fs-5">Total: <strong>€{{ order.total }}</strong></p>
+    </div>
+{% endblock %}

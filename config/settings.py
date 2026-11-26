@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'core',
     'catalogue',
     'gameweek',
+    'orders',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -72,6 +73,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "accounts.context_processors.roles",
+                "orders.context_processors.cart",
             ],
         },
     },
