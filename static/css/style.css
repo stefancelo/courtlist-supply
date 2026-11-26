@@ -85,10 +85,22 @@ main {
 
 /* Carousel slide: dark brand background so Bootstrap's white arrows and indicators stay visible */
 .process-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 18rem;
+  padding: 2rem 4rem 3rem;
   background-color: #0b1f3a;
   color: #fff;
-  min-height: 240px;
-  padding: 3rem 4rem 3.5rem;
+}
+
+/* Phones: text wraps onto more lines, so the slides are taller (still all the same) */
+@media (max-width: 575.98px) {
+  .process-slide {
+    height: 22rem;
+    padding: 2rem 3rem 3rem;
+  }
 }
 
 .process-slide p {
@@ -305,4 +317,11 @@ main h1::after {
    with a fixed narrow width; the number box takes the rest */
 .input-group > .form-select.phone-prefix {
   flex: 0 0 6rem;
+}
+
+/* Error pages (404, 403, 500): the title line runs the full width in solid orange,
+   instead of the short fading line used on other pages */
+.error-page h1::after {
+  width: 100%;
+  background: var(--cl-orange);
 }
