@@ -11,8 +11,13 @@ class BootstrapFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            is_dropdown = isinstance(field.widget, forms.Select)
-            field.widget.attrs["class"] = "form-select" if is_dropdown else "form-control"
+            if isinstance(field.widget, forms.CheckboxInput):
+                css = "form-check-input"
+            elif isinstance(field.widget, forms.Select):
+                css = "form-select"
+            else:
+                css = "form-control"
+            field.widget.attrs["class"] = css
 
     def full_clean(self):
         """Runs Django's normal validation, then marks every field with an error in red."""

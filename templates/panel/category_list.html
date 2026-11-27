@@ -1,0 +1,25 @@
+{% extends "panel/base_panel.html" %}
+
+{% block title %}Categories{% endblock %}
+{% block heading %}Categories{% endblock %}
+{% block actions %}
+    <a href="{% url 'panel:category_add' %}" class="btn btn-orange"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Add category</a>
+{% endblock %}
+
+{% block panel_content %}
+    <ul class="list-group">
+        {% for category in object_list %}
+            <li class="list-group-item d-flex justify-content-between align-items-center gap-2{% if category.parent %} ps-4{% endif %}">
+                <span>
+                    <span class="{% if not category.parent %}fw-semibold{% endif %}">{{ category.name }}</span>
+                    <span class="d-block small text-body-secondary">
+                        {% if category.parent %}In {{ category.parent.name }} · {{ category.item_count }} item{{ category.item_count|pluralize }}{% else %}Top-level category{% endif %}
+                    </span>
+                </span>
+                <span class="text-nowrap">
+                    {% include "panel/partials/row_actions.html" with edit_url="panel:category_edit" delete_url="panel:category_delete" pk=category.pk name=category.name %}
+                </span>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

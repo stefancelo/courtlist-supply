@@ -1,0 +1,43 @@
+{% extends "panel/base_panel.html" %}
+
+{% block title %}Users{% endblock %}
+{% block heading %}Users{% endblock %}
+
+{% block panel_content %}
+    <ul class="list-group">
+        {% for person in object_list %}
+            <li class="list-group-item py-3">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-5">
+                        <span class="fw-semibold">{{ person.username }}</span>
+                        {% if person.is_superuser %}
+                            <span class="badge text-bg-dark ms-1">Admin</span>
+                        {% elif person.in_staff_group %}
+                            <span class="badge badge-orange ms-1">Staff</span>
+                        {% else %}
+                            <span class="badge text-bg-secondary ms-1">Fan</span>
+                        {% endif %}
+                        {% if not person.is_active %}<span class="badge text-bg-danger ms-1">Deactivated</span>{% endif %}
+                        <span class="d-block small text-body-secondary">
+                            {{ person.get_full_name|default:"No name" }} · {{ person.email|default:"No email" }}{% if person.club %} · {{ person.club }}{% endif %}
+                        </span>
+                    </div>
+                    <div class="col-md-7 text-md-end">
+                        {% if not person.is_superuser %}
+                            {% if person.in_staff_group %}
+                                {% include "panel/partials/user_action.html" with action="make_fan" label="Make fan" style="btn-outline-secondary" %}
+                            {% else %}
+                                {% include "panel/partials/user_action.html" with action="make_staff" label="Make staff" style="btn-orange" %}
+                            {% endif %}
+                            {% if person.is_active %}
+                                {% include "panel/partials/user_action.html" with action="deactivate" label="Deactivate" style="btn-outline-danger" %}
+                            {% else %}
+                                {% include "panel/partials/user_action.html" with action="activate" label="Reactivate" style="btn-outline-success" %}
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

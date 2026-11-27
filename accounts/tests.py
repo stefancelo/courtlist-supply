@@ -53,3 +53,21 @@ class DashboardTests(TestCase):
 
         self.assertContains(response, "Hi, fan")
         self.assertNotContains(response, "Recommended for you")
+
+
+
+
+class LoginTests(TestCase):
+    """Checks the message a deactivated account gets."""
+
+    def test_deactivated_account_with_right_password_is_told_so(self):
+        User.objects.create_user(username="gone", password="Test-pass-2026", is_active=False)
+        response = self.client.post(reverse("accounts:login"), {"username": "gone", "password": "Test-pass-2026"})
+
+        self.assertContains(response, "This account has been deactivated")
+
+    def test_deactivated_account_with_wrong_password_gets_general_message(self):
+        User.objects.create_user(username="gone", password="Test-pass-2026", is_active=False)
+        response = self.client.post(reverse("accounts:login"), {"username": "gone", "password": "wrong"})
+
+        self.assertNotContains(response, "deactivated")

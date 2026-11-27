@@ -1,0 +1,24 @@
+{% extends "panel/base_panel.html" %}
+
+{% block title %}Admin panel{% endblock %}
+{% block heading %}Admin panel{% endblock %}
+
+{% block panel_content %}
+    <div class="row row-cols-2 row-cols-md-5 g-3">
+        {% for label, count, url_name in counts %}
+            <div class="col">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <p class="small text-body-secondary mb-1">{{ label }}</p>
+                        <p class="display-6 mb-0">{{ count }}</p>
+                        {% if url_name %}
+                            <a href="{% url url_name %}" class="stretched-link">
+                                <span class="visually-hidden">Manage {{ label|lower }}</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

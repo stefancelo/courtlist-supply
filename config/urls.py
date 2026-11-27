@@ -25,6 +25,7 @@ urlpatterns = [
     path('shop/', include('catalogue.urls')),
     path('accounts/', include('accounts.urls')),
     path('orders/', include('orders.urls')),
+    path('panel/', include('panel.urls')),
 ]
 
 # While developing (DEBUG on), Django itself serves uploaded images from the media folder.

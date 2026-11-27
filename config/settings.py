@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'catalogue',
     'gameweek',
     'orders',
+    'panel',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'

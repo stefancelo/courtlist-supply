@@ -1,0 +1,26 @@
+{% extends "panel/base_panel.html" %}
+
+{% block title %}{% if object %}Edit{% else %}Add{% endif %} {{ view.noun }}{% endblock %}
+{% block heading %}{% if object %}Edit {{ object.name }}{% else %}Add {{ view.noun }}{% endif %}{% endblock %}
+
+{% block panel_content %}
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    {% if object.image %}
+                        <img src="{{ object.image.url }}" alt="Current photo of {{ object.name }}" class="rounded border mb-3" width="120" height="120" />
+                    {% endif %}
+                    <form method="post" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                        {% include "partials/form_fields.html" %}
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-orange">Save</button>
+                            <a href="{{ view.success_url }}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

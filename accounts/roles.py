@@ -4,6 +4,7 @@ so views and templates never repeat the rule."""
 from functools import wraps
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 
 # Name of the group the admin adds employees to
@@ -29,3 +30,12 @@ def staff_required(view):
         return view(request, *args, **kwargs)
 
     return wrapper
+
+
+
+class AdminRequiredMixin(UserPassesTestMixin):
+    """For class-based views: only admins (superusers) may open the page.
+    Visitors are sent to the login page; logged-in non-admins get "403 Forbidden"."""
+
+    def test_func(self):
+        return self.request.user.is_superuser

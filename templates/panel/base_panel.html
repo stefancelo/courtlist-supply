@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container py-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <h1 class="mb-0">{% block heading %}{% endblock %}</h1>
+            {% block actions %}{% endblock %}
+        </div>
+        {% include "panel/partials/nav.html" %}
+        {% block panel_content %}{% endblock %}
+    </div>
+{% endblock %}

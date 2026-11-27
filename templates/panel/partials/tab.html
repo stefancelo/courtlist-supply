@@ -1,0 +1,8 @@
+<li class="nav-item">
+    <a
+        class="nav-link{% if match in request.resolver_match.url_name %} active{% endif %}"
+        href="{% url view_name %}"
+        {% if match in request.resolver_match.url_name %}aria-current="page"{% endif %}
+        >{{ label }}</a
+    >
+</li>

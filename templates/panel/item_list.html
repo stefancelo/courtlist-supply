@@ -1,0 +1,37 @@
+{% extends "panel/base_panel.html" %}
+
+{% block title %}Items{% endblock %}
+{% block heading %}Items{% endblock %}
+{% block actions %}
+    <a href="{% url 'panel:item_add' %}" class="btn btn-orange"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Add item</a>
+{% endblock %}
+
+{% block panel_content %}
+    <form method="get" class="mb-3" role="search">
+        <label for="panel-search" class="visually-hidden">Search items</label>
+        <input id="panel-search" type="search" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="Search items by name" />
+    </form>
+
+    <ul class="list-group">
+        {% for item in object_list %}
+            <li class="list-group-item py-3">
+                <div class="row g-2 align-items-center">
+                    <div class="col-3 col-md-1">
+                        <img src="{{ item.image.url }}" alt="" class="img-fluid rounded" width="64" height="64" />
+                    </div>
+                    <div class="col-9 col-md-5">
+                        <span class="fw-semibold">{{ item.name }}</span>
+                        {% if not item.is_active %}<span class="badge text-bg-secondary ms-1">Hidden</span>{% endif %}
+                        <span class="d-block small text-body-secondary">{{ item.category }} · {{ item.brand }}</span>
+                    </div>
+                    <div class="col-6 col-md-3 small">€{{ item.price }} · {{ item.stock }} in stock</div>
+                    <div class="col-6 col-md-3 text-end">
+                        {% include "panel/partials/row_actions.html" with edit_url="panel:item_edit" delete_url="panel:item_delete" pk=item.pk name=item.name %}
+                    </div>
+                </div>
+            </li>
+        {% empty %}
+            <li class="list-group-item text-body-secondary">No items found.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

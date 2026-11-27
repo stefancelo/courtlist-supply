@@ -68,4 +68,21 @@ class ProfileForm(BootstrapFormMixin, forms.ModelForm):
 
 
 class LoginForm(BootstrapFormMixin, AuthenticationForm):
-    """Django's login form (username and password check) with the site's Bootstrap styling."""
+    """Django's login form (username and password check) with the site's Bootstrap styling.
+    A deactivated account with the right password gets its own message."""
+
+    error_messages = {
+        **AuthenticationForm.error_messages,
+        "inactive": "This account has been deactivated. Contact the CourtList admin if you think this is a mistake.",
+    }
+
+    def clean(self):
+        """Django refuses deactivated accounts with the same message as a wrong password.
+        If the password is right but the account is deactivated, say so instead."""
+        username = self.cleaned_data.get("username")
+        password = self.cleaned_data.get("password")
+        if username and password:
+            person = User.objects.filter(username=username, is_active=False).first()
+            if person and person.check_password(password):
+                raise forms.ValidationError(self.error_messages["inactive"], code="inactive")
+        return super().clean()

@@ -14,6 +14,7 @@
                 <li><a class="dropdown-item" href="{% url 'orders:list' %}">My orders</a></li>
             {% endif %}
             {% if user.is_superuser %}
+                <li><a class="dropdown-item" href="{% url 'panel:overview' %}">Admin panel</a></li>
                 <li><a class="dropdown-item" href="{% url 'admin:index' %}">Django admin</a></li>
             {% endif %}
             <li><hr class="dropdown-divider" /></li>

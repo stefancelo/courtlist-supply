@@ -1,0 +1,23 @@
+{% extends "panel/base_panel.html" %}
+
+{% block title %}Brands{% endblock %}
+{% block heading %}Brands{% endblock %}
+{% block actions %}
+    <a href="{% url 'panel:brand_add' %}" class="btn btn-orange"><i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Add brand</a>
+{% endblock %}
+
+{% block panel_content %}
+    <ul class="list-group">
+        {% for brand in object_list %}
+            <li class="list-group-item d-flex justify-content-between align-items-center gap-2">
+                <span>
+                    <span class="fw-semibold">{{ brand.name }}</span>
+                    <span class="d-block small text-body-secondary">{{ brand.item_count }} item{{ brand.item_count|pluralize }}</span>
+                </span>
+                <span class="text-nowrap">
+                    {% include "panel/partials/row_actions.html" with edit_url="panel:brand_edit" delete_url="panel:brand_delete" pk=brand.pk name=brand.name %}
+                </span>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

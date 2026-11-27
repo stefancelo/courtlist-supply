@@ -1,0 +1,5 @@
+<form method="post" action="{% url 'panel:user_update' person.pk %}" class="d-inline">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="{{ action }}" />
+    <button type="submit" class="btn btn-sm {{ style }}">{{ label }}</button>
+</form>
