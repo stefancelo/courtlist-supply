@@ -8,6 +8,7 @@
             <i class="bi bi-person-circle me-1" aria-hidden="true"></i>{{ user.first_name|default:user.username }}
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
             <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Profile</a></li>
             {% if is_courtlist_staff %}
                 <li><a class="dropdown-item" href="{% url 'orders:list' %}">My orders</a></li>

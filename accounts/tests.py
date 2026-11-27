@@ -19,7 +19,7 @@ class RegisterTests(TestCase):
         }
         response = self.client.post(reverse("accounts:register"), data)
 
-        self.assertRedirects(response, reverse("core:home"))
+        self.assertRedirects(response, reverse("accounts:dashboard"))
         user = User.objects.get(username="newfan")
         self.assertEqual(user.email, "new@fan.com")
         self.assertEqual(int(self.client.session["_auth_user_id"]), user.pk)
@@ -35,3 +35,21 @@ class ProfileFormTests(TestCase):
 
         self.assertFalse(form.is_valid())
         self.assertIn("phone", form.errors)
+
+
+
+
+class DashboardTests(TestCase):
+    """Checks who can open the dashboard and what fans see on it."""
+
+    def test_dashboard_needs_login(self):
+        response = self.client.get(reverse("accounts:dashboard"))
+        self.assertRedirects(response, f"{reverse('accounts:login')}?next={reverse('accounts:dashboard')}")
+
+    def test_fan_sees_no_shop_sections(self):
+        fan = User.objects.create_user(username="fan", password="Test-pass-2026")
+        self.client.force_login(fan)
+        response = self.client.get(reverse("accounts:dashboard"))
+
+        self.assertContains(response, "Hi, fan")
+        self.assertNotContains(response, "Recommended for you")

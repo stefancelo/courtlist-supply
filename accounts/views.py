@@ -1,7 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.db.models import Max
 from django.shortcuts import redirect, render
+
+from catalogue.models import Item
+from catalogue.recommender import recommend_for
+
+from .roles import is_courtlist_staff
 
 from .forms import ProfileForm, RegisterForm
 
@@ -17,7 +23,7 @@ def register(request):
             user = form.save()
             login(request, user)
             messages.success(request, f"Welcome to CourtList, {user.first_name}!")
-            return redirect("core:home")
+            return redirect("accounts:dashboard")
     else:
         form = RegisterForm()
 
@@ -38,3 +44,25 @@ def profile(request):
         form = ProfileForm(instance=request.user)
 
     return render(request, "accounts/profile.html", {"form": form})
+
+
+@login_required
+def dashboard(request):
+    """The logged-in user's personal page. Everyone sees a short account summary;
+    staff also see recommendations, recently viewed items, their latest orders and ratings."""
+    user = request.user
+    context = {}
+
+    if is_courtlist_staff(user):
+        context = {
+            "recommendations": recommend_for(user),
+            "recent_items": (
+                Item.objects.filter(views__user=user, is_active=True)
+                .annotate(last_viewed=Max("views__viewed_at"))
+                .order_by("-last_viewed")[:4]
+            ),
+            "orders": user.orders.prefetch_related("lines")[:3],
+            "ratings": user.ratings.select_related("item")[:5],
+        }
+
+    return render(request, "accounts/dashboard.html", context)

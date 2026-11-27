@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <div class="container py-4">
+        <h1 class="mb-1">Hi, {{ user.first_name|default:user.username }}</h1>
+        <p class="text-body-secondary mb-4">
+            {% if user.is_superuser %}Admin{% elif is_courtlist_staff %}CourtList staff{% else %}Fan{% endif %}{% if user.club %} · {{ user.club }}{% endif %}
+            · <a href="{% url 'accounts:profile' %}">Edit profile</a>
+        </p>
+
+        {% if is_courtlist_staff %}
+            <section class="mb-5" aria-labelledby="recommended-heading">
+                <h2 id="recommended-heading" class="h4 mb-3">Recommended for you</h2>
+                {% include "catalogue/partials/item_grid.html" with items=recommendations empty_text="Browse the shop to get personal suggestions." %}
+            </section>
+
+            <section class="mb-5" aria-labelledby="viewed-heading">
+                <h2 id="viewed-heading" class="h4 mb-3">Recently viewed</h2>
+                {% include "catalogue/partials/item_grid.html" with items=recent_items empty_text="Items you open in the shop will appear here." %}
+            </section>
+
+            <div class="row g-4">
+                <section class="col-lg-6" aria-labelledby="orders-heading">
+                    <h2 id="orders-heading" class="h4 mb-3">Latest orders</h2>
+                    <div class="list-group mb-2">
+                        {% for order in orders %}
+                            <a
+                                href="{% url 'orders:detail' order.pk %}"
+                                class="list-group-item list-group-item-action d-flex justify-content-between gap-2">
+                                <span>
+                                    Order #{{ order.pk }}
+                                    <span class="d-block small text-body-secondary">{{ order.created_at|date:"j M Y" }}</span>
+                                </span>
+                                <span class="fw-semibold">€{{ order.total }}</span>
+                            </a>
+                        {% empty %}
+                            <p class="text-body-secondary mb-0">No orders yet.</p>
+                        {% endfor %}
+                    </div>
+                    {% if orders %}<a href="{% url 'orders:list' %}" class="small">All orders</a>{% endif %}
+                </section>
+
+                <section class="col-lg-6" aria-labelledby="ratings-heading">
+                    <h2 id="ratings-heading" class="h4 mb-3">Your ratings</h2>
+                    <ul class="list-group">
+                        {% for rating in ratings %}
+                            <li class="list-group-item d-flex justify-content-between gap-2">
+                                <a href="{{ rating.item.get_absolute_url }}">{{ rating.item.name }}</a>
+                                {% include "catalogue/partials/stars.html" with value=rating.stars %}
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item text-body-secondary">You haven't rated anything yet.</li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            </div>
+        {% else %}
+            <p class="text-body-secondary">
+                Your predictions and comments from the gameweek page will appear here.
+            </p>
+        {% endif %}
+    </div>
+{% endblock %}

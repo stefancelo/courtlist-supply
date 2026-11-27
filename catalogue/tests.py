@@ -8,6 +8,7 @@ from orders.models import Order, OrderItem
 
 from .forms import ItemFilterForm
 from .models import Brand, Category, Item, ItemView, Rating, SearchQuery
+from .recommender import recommend_for
 
 
 class CategoryModelTests(TestCase):
@@ -120,3 +121,45 @@ class ItemFilterFormTests(TestCase):
         form = ItemFilterForm({"min_price": "50", "max_price": "10"})
         self.assertFalse(form.is_valid())
         self.assertIn("max_price", form.errors)
+
+
+
+
+class RecommenderTests(TestCase):
+    """Checks that recommendations follow what the user viewed and leave out what they ordered."""
+
+    @classmethod
+    def setUpTestData(cls):
+        balls = Category.objects.create(name="Balls", slug="balls")
+        towels = Category.objects.create(name="Towels", slug="towels")
+        brand = Brand.objects.create(name="Molten", slug="molten")
+
+        def make_item(name, slug, category):
+            return Item.objects.create(
+                name=name,
+                slug=slug,
+                category=category,
+                brand=brand,
+                description="Test item.",
+                price="10.00",
+                colour="orange",
+                image="items/test.png",
+                stock=5,
+            )
+
+        cls.ball_a = make_item("Ball A", "ball-a", balls)
+        cls.ball_b = make_item("Ball B", "ball-b", balls)
+        cls.towel = make_item("Towel", "towel", towels)
+        cls.user = User.objects.create_user(username="viewer", password="Test-pass-2026")
+
+    def test_viewed_category_comes_first(self):
+        ItemView.objects.create(item=self.ball_a, user=self.user)
+        picks = recommend_for(self.user, exclude=self.ball_a)
+
+        self.assertEqual(picks[0], self.ball_b)
+
+    def test_ordered_items_are_left_out(self):
+        order = Order.objects.create(user=self.user, total="10.00")
+        OrderItem.objects.create(order=order, item=self.ball_b, quantity=1, unit_price="10.00")
+
+        self.assertNotIn(self.ball_b, recommend_for(self.user))

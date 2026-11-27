@@ -1,0 +1,9 @@
+<div class="row row-cols-2 row-cols-md-4 g-3">
+    {% for item in items %}
+        {% include "catalogue/partials/item_card.html" %}
+    {% empty %}
+        <div class="col-12">
+            <p class="text-body-secondary mb-0">{{ empty_text }}</p>
+        </div>
+    {% endfor %}
+</div>

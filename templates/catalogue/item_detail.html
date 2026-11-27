@@ -140,6 +140,12 @@
                 </div>
             </div>
         </section>
+
+        <!-- Recommendations -->
+        <section class="mt-5" aria-labelledby="recommended-heading">
+            <h2 id="recommended-heading" class="h4 mb-3">You might also need</h2>
+            {% include "catalogue/partials/item_grid.html" with items=recommendations empty_text="No suggestions right now." %}
+        </section>
     </div>
 {% endblock %}
 

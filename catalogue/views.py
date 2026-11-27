@@ -10,6 +10,7 @@ from orders.models import OrderItem
 
 from .forms import ItemFilterForm, RatingForm
 from .models import Category, Item, ItemView, Rating, SearchQuery
+from .recommender import recommend_for
 
 
 def record_search(request, term, items):
@@ -87,6 +88,7 @@ def item_detail(request, slug):
         "can_rate": has_ordered(request.user, item),
         "own_rating": item.ratings.filter(user=request.user).first(),
         "reviews": latest_reviews(item),
+        "recommendations": recommend_for(request.user, exclude=item),
         **rating_summary(item),
     }
     return render(request, "catalogue/item_detail.html", context)
