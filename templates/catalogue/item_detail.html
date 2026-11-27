@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ item.name }}{% endblock %}
 {% block description %}{{ item.description|truncatewords:25 }}{% endblock %}
@@ -33,6 +34,9 @@
             <div class="col-md-6">
                 <p class="text-uppercase small fw-semibold text-orange mb-1">{{ item.brand.name }}</p>
                 <h1 class="h2">{{ item.name }}</h1>
+                <p id="rating-summary" class="mb-3" aria-live="polite">
+                    {% include "catalogue/partials/rating_summary.html" %}
+                </p>
                 <p class="fs-3 fw-semibold">€{{ item.price }}</p>
                 <p>{{ item.description|linebreaksbr }}</p>
 
@@ -83,5 +87,63 @@
                 </form>
             </div>
         </div>
+
+        <!-- Ratings and reviews -->
+        <section class="row g-4 mt-4" aria-labelledby="rate-heading">
+            <div class="col-lg-5">
+                <h2 id="rate-heading" class="h4">Rate this item</h2>
+                {% if can_rate %}
+                <form id="rating-form" method="post" action="{% url 'catalogue:rate' item.pk %}">
+                    {% csrf_token %}
+                    <fieldset class="mb-3">
+                        <legend class="form-label fs-6">Your rating</legend>
+                        <div class="star-input">
+                            {% for value in "54321" %}
+                                <input
+                                    type="radio"
+                                    class="visually-hidden"
+                                    id="star-{{ value }}"
+                                    name="stars"
+                                    value="{{ value }}"
+                                    required
+                                    {% if own_rating.stars|stringformat:"d" == value %}checked{% endif %} />
+                                <label for="star-{{ value }}" title="{{ value }} star{{ value|pluralize }}">
+                                    <i class="bi bi-star-fill" aria-hidden="true"></i>
+                                    <span class="visually-hidden">{{ value }} star{{ value|pluralize }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </fieldset>
+                    <div class="mb-3">
+                        <label for="rating-review" class="form-label">
+                            Short review <span class="text-body-secondary">(optional)</span>
+                        </label>
+                        <textarea id="rating-review" name="review" rows="3" maxlength="500" class="form-control">{{ own_rating.review }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-orange">
+                        {% if own_rating %}Update your rating{% else %}Submit rating{% endif %}
+                    </button>
+                    <p id="rating-message" class="small mt-2 mb-0" role="status"></p>
+                </form>
+                {% else %}
+                    <p class="text-body-secondary">
+                        Only staff who have ordered this item can rate it. Once your order is placed, you can come back
+                        and leave a rating.
+                    </p>
+                {% endif %}
+            </div>
+
+            <div class="col-lg-7">
+                <h2 class="h4">Recent reviews</h2>
+                <div id="review-list">
+                    {% include "catalogue/partials/review_list.html" %}
+                </div>
+            </div>
+        </section>
     </div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="{% static 'js/rating.js' %}"></script>
 {% endblock %}

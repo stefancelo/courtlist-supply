@@ -1,0 +1,7 @@
+{% if count %}
+    {% include "catalogue/partials/stars.html" with value=average %}
+    <span class="ms-1">{{ average|floatformat:1 }} out of 5</span>
+    <span class="text-body-secondary">({{ count }} rating{{ count|pluralize }})</span>
+{% else %}
+    <span class="text-body-secondary">No ratings yet</span>
+{% endif %}

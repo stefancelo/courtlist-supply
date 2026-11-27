@@ -1,0 +1,5 @@
+{% load catalogue_extras %}
+<span class="text-orange text-nowrap" aria-hidden="true">
+    {% for icon in value|star_icons %}<i class="bi bi-{{ icon }}"></i>{% endfor %}
+</span>
+<span class="visually-hidden">Rated {{ value|floatformat:1 }} out of 5</span>

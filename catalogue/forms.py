@@ -3,7 +3,7 @@ from django.db.models import Q
 
 from core.forms import BootstrapFormMixin
 
-from .models import Brand, Item, Size
+from .models import Brand, Item, Rating, Size
 
 
 class ItemFilterForm(BootstrapFormMixin, forms.Form):
@@ -61,3 +61,11 @@ class ItemFilterForm(BootstrapFormMixin, forms.Form):
             items = items.filter(sizes=data["size"])
 
         return items.order_by(data["sort"] or "name")
+
+class RatingForm(BootstrapFormMixin, forms.ModelForm):
+    """Checks a submitted rating: 1 to 5 stars (the model's validators) and an optional
+    review of up to 500 characters."""
+
+    class Meta:
+        model = Rating
+        fields = ["stars", "review"]

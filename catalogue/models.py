@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from django.conf import settings
-from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
 
@@ -123,3 +123,40 @@ class SearchQuery(models.Model):
 
     def __str__(self):
         return self.term
+
+
+
+class Rating(models.Model):
+    """A staff member's star rating (1 to 5) and optional short review of an item.
+    Each user rates an item once; rating again updates the same row."""
+
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name="ratings")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="ratings")
+    stars = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    review = models.TextField(max_length=500, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-updated_at"]
+        constraints = [
+            models.UniqueConstraint(fields=["item", "user"], name="one_rating_per_user_per_item"),
+        ]
+
+    def __str__(self):
+        return f"{self.user} rated {self.item}: {self.stars}/5"
+
+
+class ItemView(models.Model):
+    """One visit by a user to an item's page. Feeds "recently viewed" on the dashboard,
+    the recommender and the "most viewed" analytics."""
+
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name="views")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="item_views")
+    viewed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-viewed_at"]
+
+    def __str__(self):
+        return f"{self.user} viewed {self.item}"

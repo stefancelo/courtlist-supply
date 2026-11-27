@@ -14,6 +14,12 @@
                     {{ item.name }}
                 </a>
             </h3>
+            {% if item.rating_count %}
+                <p class="small mb-2">
+                    {% include "catalogue/partials/stars.html" with value=item.avg_rating %}
+                    <span class="text-body-secondary">({{ item.rating_count }})</span>
+                </p>
+            {% endif %}
             <p class="fw-semibold text-orange mt-auto mb-0">€{{ item.price }}</p>
         </div>
     </article>

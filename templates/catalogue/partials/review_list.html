@@ -1,0 +1,12 @@
+{% for rating in reviews %}
+    <article class="border-bottom py-3">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+            {% include "catalogue/partials/stars.html" with value=rating.stars %}
+            <span class="small text-body-secondary">{{ rating.updated_at|date:"j M Y" }}</span>
+        </div>
+        <p class="mb-1">{{ rating.review }}</p>
+        <p class="small text-body-secondary mb-0">{{ rating.user.first_name|default:rating.user.username }}</p>
+    </article>
+{% empty %}
+    <p class="text-body-secondary">No written reviews yet.</p>
+{% endfor %}

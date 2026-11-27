@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Brand, Category, Item, SearchQuery, Size
+from .models import Brand, Category, Item, ItemView, Rating, SearchQuery, Size
 
 
 @admin.register(Category)
@@ -35,3 +35,15 @@ class ItemAdmin(admin.ModelAdmin):
 class SearchQueryAdmin(admin.ModelAdmin):
     list_display = ["term", "user", "results_count", "created_at"]
     list_filter = ["created_at"]
+
+@admin.register(Rating)
+class RatingAdmin(admin.ModelAdmin):
+    list_display = ["item", "user", "stars", "updated_at"]
+    list_filter = ["stars"]
+    search_fields = ["item__name", "user__username", "review"]
+
+
+@admin.register(ItemView)
+class ItemViewAdmin(admin.ModelAdmin):
+    list_display = ["item", "user", "viewed_at"]
+    list_filter = ["viewed_at"]

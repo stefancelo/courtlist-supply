@@ -335,3 +335,33 @@ main h1::after {
   background-color: var(--cl-orange);
   color: #fff;
 }
+
+/* Star rating input: five radio buttons shown as stars. The HTML lists them 5 to 1,
+   and row-reverse displays them 1 to 5. That way "this star and every star after it in
+   the HTML" (the ~ selector) are exactly the stars up to it on screen */
+.star-input {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  gap: 0.25rem;
+  font-size: 1.75rem;
+}
+
+.star-input label {
+  color: var(--bs-secondary-color);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+/* The chosen star and all lower ones are orange; hovering previews the same */
+.star-input input:checked ~ label,
+.star-input label:hover,
+.star-input label:hover ~ label {
+  color: var(--cl-orange);
+}
+
+/* Keyboard users see which star has focus */
+.star-input input:focus-visible + label {
+  outline: 2px solid var(--cl-orange);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}

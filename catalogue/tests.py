@@ -4,9 +4,10 @@ from django.urls import reverse
 
 from accounts.models import User
 from accounts.roles import STAFF_GROUP
+from orders.models import Order, OrderItem
 
 from .forms import ItemFilterForm
-from .models import Brand, Category, Item, SearchQuery
+from .models import Brand, Category, Item, ItemView, Rating, SearchQuery
 
 
 class CategoryModelTests(TestCase):
@@ -73,6 +74,41 @@ class CatalogueViewTests(TestCase):
         response = self.client.get(reverse("catalogue:item_list"), {"q": "Molten"})
         self.assertContains(response, "Test ball")
         self.assertEqual(SearchQuery.objects.get().term, "molten")
+
+
+    def order_ball(self):
+        """Gives the staff user a past order containing the ball, so they may rate it."""
+        order = Order.objects.create(user=self.staff, total="99.00")
+        OrderItem.objects.create(order=order, item=self.ball, quantity=1, unit_price="99.00")
+
+    def test_rating_without_ordering_is_refused(self):
+        url = reverse("catalogue:rate", args=[self.ball.pk])
+        response = self.client.post(url, {"stars": 5}, headers={"X-Requested-With": "fetch"})
+
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(Rating.objects.exists())
+
+    def test_rating_by_fetch_is_saved_once_per_user(self):
+        self.order_ball()
+        url = reverse("catalogue:rate", args=[self.ball.pk])
+        fetch = {"X-Requested-With": "fetch"}
+        self.client.post(url, {"stars": 4, "review": "Great grip."}, headers=fetch)
+        response = self.client.post(url, {"stars": 2}, headers=fetch)
+
+        self.assertTrue(response.json()["ok"])
+        self.assertEqual(Rating.objects.get().stars, 2)
+
+    def test_invalid_rating_is_rejected(self):
+        self.order_ball()
+        url = reverse("catalogue:rate", args=[self.ball.pk])
+        response = self.client.post(url, {"stars": 9}, headers={"X-Requested-With": "fetch"})
+
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(Rating.objects.exists())
+
+    def test_opening_an_item_records_a_view(self):
+        self.client.get(reverse("catalogue:item_detail", args=["test-ball"]))
+        self.assertEqual(ItemView.objects.filter(user=self.staff).count(), 1)
         
         
 
