@@ -1,0 +1,21 @@
+<div class="chat-message{% if comment.user == user %} is-own{% endif %}" data-id="{{ comment.pk }}">
+    <div class="chat-bubble">
+        <div class="chat-meta">
+            <strong>{{ comment.user.first_name|default:comment.user.username }}</strong>
+            {% if comment.user.club %}<span>{{ comment.user.club }}</span>{% endif %}
+            <span class="chat-topic">{% if comment.fixture %}{{ comment.fixture.short_label }}{% else %}General{% endif %}</span>
+        </div>
+        <p class="mb-0">{{ comment.text|linebreaksbr }}</p>
+        <div class="chat-footer">
+            <time datetime="{{ comment.created_at|date:'c' }}">{{ comment.created_at|date:"j M, H:i" }}</time>
+            {% if user.is_superuser %}
+                <a
+                    href="{% url 'panel:comment_delete' comment.pk %}?next={% url 'gameweek:index' %}"
+                    class="chat-delete"
+                    aria-label="Delete this message">
+                    <i class="bi bi-trash" aria-hidden="true"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>

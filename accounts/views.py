@@ -48,13 +48,20 @@ def profile(request):
 
 @login_required
 def dashboard(request):
-    """The logged-in user's personal page. Everyone sees a short account summary;
-    staff also see recommendations, recently viewed items, their latest orders and ratings."""
+    """The logged-in user's personal page. Everyone sees their predictions and latest chat
+    messages; staff also see recommendations, recently viewed items, orders and ratings."""
     user = request.user
-    context = {}
+    context = {
+        "predictions": user.predictions.select_related(
+            "fixture__home_team", "fixture__away_team", "winner"
+        ).order_by("-fixture__tip_off")[:10],
+        "chat_messages": user.comments.select_related(
+            "fixture__home_team", "fixture__away_team"
+        ).order_by("-created_at")[:5],
+    }
 
     if is_courtlist_staff(user):
-        context = {
+        context |= {
             "recommendations": recommend_for(user),
             "recent_items": (
                 Item.objects.filter(views__user=user, is_active=True)

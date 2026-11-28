@@ -3,10 +3,19 @@
 :root,
 [data-bs-theme="light"] {
   --cl-orange: #c2410c;
+  /* Every link (and the panel tabs) in the brand orange instead of Bootstrap blue */
+  --bs-link-color: #c2410c;
+  --bs-link-color-rgb: 194, 65, 12;
+  --bs-link-hover-color: #9a3412;
+  --bs-link-hover-color-rgb: 154, 52, 18;
 }
 
 [data-bs-theme="dark"] {
   --cl-orange: #ff6500;
+  --bs-link-color: #ff6500;
+  --bs-link-color-rgb: 255, 101, 0;
+  --bs-link-hover-color: #ff8533;
+  --bs-link-hover-color-rgb: 255, 133, 51;
 }
 
 /* Orange text, e.g. "List" in the brand name */
@@ -364,4 +373,118 @@ main h1::after {
   outline: 2px solid var(--cl-orange);
   outline-offset: 2px;
   border-radius: 0.25rem;
+}
+
+/* Gameweek vote bar: home share in the brand orange, away share in blue
+   (orange's opposite colour), both visible on light and dark backgrounds */
+.progress-bar.vote-home {
+  background-color: var(--cl-orange);
+}
+
+.progress-bar.vote-away {
+  background-color: #3b82f6;
+}
+
+
+/* Gameweek chat: a scrolling message area with chat bubbles. Your own messages sit
+   on the right in orange, everyone else's on the left */
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  height: 26rem;
+  overflow-y: auto;
+  padding: 1rem;
+  background-color: var(--bs-tertiary-bg);
+}
+
+.chat-message {
+  display: flex;
+}
+
+.chat-message.is-own {
+  justify-content: flex-end;
+}
+
+.chat-bubble {
+  max-width: 80%;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--bs-border-color-translucent);
+  border-radius: 1rem 1rem 1rem 0.25rem;
+  background-color: var(--bs-body-bg);
+  overflow-wrap: anywhere;
+}
+
+/* Fixed darker orange so white text stays readable in both themes */
+.is-own .chat-bubble {
+  border-color: transparent;
+  border-radius: 1rem 1rem 0.25rem 1rem;
+  background-color: #c2410c;
+  color: #fff;
+}
+
+.chat-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.2rem;
+  font-size: 0.8rem;
+}
+
+.chat-meta span {
+  opacity: 0.8;
+}
+
+.chat-meta .chat-topic {
+  padding: 0 0.45rem;
+  border-radius: 0.5rem;
+  background-color: rgba(var(--bs-emphasis-color-rgb), 0.08);
+  font-weight: 600;
+  opacity: 1;
+}
+
+.is-own .chat-topic {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.chat-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  font-size: 0.7rem;
+  opacity: 0.75;
+}
+
+.chat-delete {
+  color: inherit;
+}
+
+#chat-form textarea {
+  resize: none;
+}
+
+/* The pulsing green "Live" dot */
+.live-dot {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-right: 0.35rem;
+  border-radius: 50%;
+  background-color: #22c55e;
+  animation: live-pulse 2s infinite;
+}
+
+@keyframes live-pulse {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-dot {
+    animation: none;
+  }
 }

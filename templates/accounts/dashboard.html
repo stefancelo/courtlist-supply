@@ -10,6 +10,52 @@
             · <a href="{% url 'accounts:profile' %}">Edit profile</a>
         </p>
 
+        <div class="row g-4 mb-5">
+            <section class="col-lg-6" aria-labelledby="predictions-heading">
+                <h2 id="predictions-heading" class="h4 mb-3">Your predictions</h2>
+                <ul class="list-group">
+                    {% for prediction in predictions %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center gap-2">
+                            <span>
+                                {{ prediction.fixture.short_label }}
+                                <span class="d-block small text-body-secondary">You picked {{ prediction.winner }}</span>
+                            </span>
+                            {% if prediction.outcome == "correct" %}
+                                <span class="badge text-bg-success">Correct</span>
+                            {% elif prediction.outcome == "wrong" %}
+                                <span class="badge text-bg-secondary">Wrong</span>
+                            {% else %}
+                                <span class="small text-body-secondary">{{ prediction.fixture.tip_off|date:"D j M, H:i" }}</span>
+                            {% endif %}
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-body-secondary">
+                            No predictions yet. <a href="{% url 'gameweek:index' %}">Make your picks</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <section class="col-lg-6" aria-labelledby="messages-heading">
+                <h2 id="messages-heading" class="h4 mb-3">Your latest chat messages</h2>
+                <ul class="list-group">
+                    {% for message in chat_messages %}
+                        <li class="list-group-item">
+                            <span class="small text-body-secondary">
+                                {% if message.fixture %}{{ message.fixture.short_label }}{% else %}General{% endif %}
+                                · {{ message.created_at|date:"j M, H:i" }}
+                            </span>
+                            <span class="d-block">{{ message.text|truncatewords:20 }}</span>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-body-secondary">
+                            No messages yet. <a href="{% url 'gameweek:index' %}#discussion">Join the chat</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        </div>
+        
         {% if is_courtlist_staff %}
             <section class="mb-5" aria-labelledby="recommended-heading">
                 <h2 id="recommended-heading" class="h4 mb-3">Recommended for you</h2>
@@ -56,10 +102,6 @@
                     </ul>
                 </section>
             </div>
-        {% else %}
-            <p class="text-body-secondary">
-                Your predictions and comments from the gameweek page will appear here.
-            </p>
         {% endif %}
     </div>
 {% endblock %}

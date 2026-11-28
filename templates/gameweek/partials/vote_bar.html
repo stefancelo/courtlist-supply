@@ -1,0 +1,18 @@
+<div id="votes-{{ fixture.pk }}">
+    {% if fixture.total_votes %}
+        <div
+            class="progress mb-1"
+            role="img"
+            aria-label="{{ fixture.home_percent }}% picked {{ fixture.home_team }}, {{ fixture.away_percent }}% picked {{ fixture.away_team }}">
+            <div class="progress-bar vote-home" style="width: {{ fixture.home_percent }}%"></div>
+            <div class="progress-bar vote-away" style="width: {{ fixture.away_percent }}%"></div>
+        </div>
+        <div class="d-flex justify-content-between small text-body-secondary">
+            <span>{{ fixture.home_percent }}%</span>
+            <span>{{ fixture.total_votes }} prediction{{ fixture.total_votes|pluralize }}</span>
+            <span>{{ fixture.away_percent }}%</span>
+        </div>
+    {% else %}
+        <p class="small text-body-secondary mb-1">No predictions yet.</p>
+    {% endif %}
+</div>

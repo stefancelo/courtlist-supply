@@ -10,28 +10,28 @@ from django.utils.text import slugify
 
 from gameweek.models import Team
 
-# (name, city, country) for every club in the 2026-27 Euroleague season
+# (name, 3-letter code, city, country) for every club in the 2026-27 Euroleague season
 TEAMS = [
-    ("Anadolu Efes", "Istanbul", "Turkey"),
-    ("Baskonia", "Vitoria-Gasteiz", "Spain"),
-    ("Beşiktaş", "Istanbul", "Turkey"),
-    ("Crvena Zvezda", "Belgrade", "Serbia"),
-    ("Dubai Basketball", "Dubai", "United Arab Emirates"),
-    ("FC Barcelona", "Barcelona", "Spain"),
-    ("FC Bayern Munich", "Munich", "Germany"),
-    ("Fenerbahçe", "Istanbul", "Turkey"),
-    ("Hapoel Tel Aviv", "Tel Aviv", "Israel"),
-    ("LDLC ASVEL", "Villeurbanne", "France"),
-    ("Maccabi Tel Aviv", "Tel Aviv", "Israel"),
-    ("Olimpia Milano", "Milan", "Italy"),
-    ("Olympiacos", "Piraeus", "Greece"),
-    ("Panathinaikos", "Athens", "Greece"),
-    ("Paris Basketball", "Paris", "France"),
-    ("Partizan", "Belgrade", "Serbia"),
-    ("Real Madrid", "Madrid", "Spain"),
-    ("Valencia Basket", "Valencia", "Spain"),
-    ("Virtus Bologna", "Bologna", "Italy"),
-    ("Žalgiris", "Kaunas", "Lithuania"),
+    ("Anadolu Efes", "EFS", "Istanbul", "Turkey"),
+    ("Baskonia", "BKN", "Vitoria-Gasteiz", "Spain"),
+    ("Beşiktaş", "BJK", "Istanbul", "Turkey"),
+    ("Crvena Zvezda", "CZV", "Belgrade", "Serbia"),
+    ("Dubai Basketball", "DUB", "Dubai", "United Arab Emirates"),
+    ("FC Barcelona", "BAR", "Barcelona", "Spain"),
+    ("FC Bayern Munich", "BAY", "Munich", "Germany"),
+    ("Fenerbahçe", "FEN", "Istanbul", "Turkey"),
+    ("Hapoel Tel Aviv", "HTA", "Tel Aviv", "Israel"),
+    ("LDLC ASVEL", "ASV", "Villeurbanne", "France"),
+    ("Maccabi Tel Aviv", "MTA", "Tel Aviv", "Israel"),
+    ("Olimpia Milano", "MIL", "Milan", "Italy"),
+    ("Olympiacos", "OLY", "Piraeus", "Greece"),
+    ("Panathinaikos", "PAO", "Athens", "Greece"),
+    ("Paris Basketball", "PRS", "Paris", "France"),
+    ("Partizan", "PAR", "Belgrade", "Serbia"),
+    ("Real Madrid", "RMA", "Madrid", "Spain"),
+    ("Valencia Basket", "VAL", "Valencia", "Spain"),
+    ("Virtus Bologna", "VIR", "Bologna", "Italy"),
+    ("Žalgiris", "ZAL", "Kaunas", "Lithuania"),
 ]
 
 
@@ -39,9 +39,9 @@ class Command(BaseCommand):
     help = "Creates or updates the 20 Euroleague clubs of the 2026-27 season."
 
     def handle(self, *args, **options):
-        for name, city, country in TEAMS:
+        for name, code, city, country in TEAMS:
             Team.objects.update_or_create(
                 slug=slugify(name),
-                defaults={"name": name, "city": city, "country": country},
+                defaults={"name": name, "code": code, "city": city, "country": country},
             )
         self.stdout.write(self.style.SUCCESS(f"{len(TEAMS)} Euroleague clubs ready."))

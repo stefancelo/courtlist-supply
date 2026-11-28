@@ -7,6 +7,7 @@ from django.db.models import Count, ProtectedError, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, DeleteView, ListView, TemplateView, UpdateView
@@ -14,6 +15,7 @@ from django.views.generic import CreateView, DeleteView, ListView, TemplateView,
 from accounts.models import User
 from accounts.roles import STAFF_GROUP, AdminRequiredMixin
 from catalogue.models import Brand, Category, Item
+from gameweek.models import Comment
 from orders.models import Order
 
 from .analytics import build_analytics
@@ -48,7 +50,7 @@ class PanelDeleteView(AdminRequiredMixin, DeleteView):
             messages.error(self.request, f"{name} can't be deleted because other records still use it. {self.protected_hint}")
         else:
             messages.success(self.request, f"{name} was deleted.")
-        return redirect(self.success_url)
+        return redirect(self.get_success_url())
 
 
 # ---------- Overview ----------
@@ -66,6 +68,7 @@ class OverviewView(AdminRequiredMixin, TemplateView):
             ("Categories", Category.objects.count(), "panel:categories"),
             ("Brands", Brand.objects.count(), "panel:brands"),
             ("Users", User.objects.count(), "panel:users"),
+            ("Comments", Comment.objects.count(), "panel:comments"),
             ("Orders", Order.objects.count(), "panel:analytics"),
         ]
         return context
@@ -222,7 +225,32 @@ class UserUpdate(AdminRequiredMixin, View):
         return redirect("panel:users")
 
 
+# ---------- Comments ----------
 
+
+class CommentList(AdminRequiredMixin, ListView):
+    """Every discussion comment, newest first, for moderation."""
+
+    template_name = "panel/comment_list.html"
+
+    def get_queryset(self):
+        return Comment.objects.select_related("user").order_by("-created_at")
+
+
+class CommentDelete(PanelDeleteView):
+    """Deletes a comment, then goes back to where the admin came from: the Gameweek
+    page (via ?next=) or the Comments list."""
+
+    model = Comment
+    noun = "comment"
+    success_url = reverse_lazy("panel:comments")
+
+    def get_success_url(self):
+        next_url = self.request.POST.get("next") or self.request.GET.get("next")
+        is_safe = url_has_allowed_host_and_scheme(
+            next_url, allowed_hosts={self.request.get_host()}, require_https=self.request.is_secure()
+        )
+        return next_url if next_url and is_safe else str(self.success_url)
 
 # ---------- Analytics ----------
 

@@ -24,6 +24,7 @@
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav ms-auto">
                     {% include "partials/nav_link.html" with view_name="core:home" label="Home" %}
+                    {% include "partials/nav_link.html" with view_name="gameweek:index" section="gameweek" label="Gameweek" %}
                     {% include "partials/nav_link.html" with view_name="core:about" label="About" %}
                     {% include "partials/nav_link.html" with view_name="core:contact" label="Contact" %}
                                         {% if is_courtlist_staff %}

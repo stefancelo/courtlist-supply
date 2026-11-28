@@ -1,0 +1,8 @@
+<button
+    type="submit"
+    name="winner"
+    value="{{ team.pk }}"
+    class="btn btn-sm flex-fill {% if fixture.my_pick == team.pk %}btn-orange{% else %}btn-outline-secondary{% endif %}"
+    aria-pressed="{% if fixture.my_pick == team.pk %}true{% else %}false{% endif %}">
+    {{ team }}
+</button>
