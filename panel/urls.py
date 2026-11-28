@@ -20,4 +20,6 @@ urlpatterns = [
     path("brands/<int:pk>/delete/", views.BrandDelete.as_view(), name="brand_delete"),
     path("users/", views.UserList.as_view(), name="users"),
     path("users/<int:pk>/update/", views.UserUpdate.as_view(), name="user_update"),
+    path("analytics/", views.AnalyticsView.as_view(), name="analytics"),
+    path("analytics/data/", views.AnalyticsData.as_view(), name="analytics_data"),
 ]

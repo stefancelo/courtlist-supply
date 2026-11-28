@@ -84,3 +84,27 @@ class BrandForm(SlugFromNameMixin, BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = Brand
         fields = ["name", "slug"]
+
+
+
+
+class AnalyticsFilterForm(BootstrapFormMixin, forms.Form):
+    """Date range and category for the analytics dashboard."""
+
+    start = forms.DateField(label="From", widget=forms.DateInput(attrs={"type": "date"}))
+    end = forms.DateField(label="To", widget=forms.DateInput(attrs={"type": "date"}))
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.select_related("parent").order_by("parent__name", "name"),
+        required=False,
+        empty_label="All categories",
+        to_field_name="slug",
+    )
+
+    def clean(self):
+        cleaned = super().clean()
+        start, end = cleaned.get("start"), cleaned.get("end")
+        if start and end and start > end:
+            self.add_error("end", "The end date must be on or after the start date.")
+        elif start and end and (end - start).days > 366:
+            self.add_error("start", "Choose a period of one year at most.")
+        return cleaned

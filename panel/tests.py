@@ -58,3 +58,25 @@ class PanelTests(TestCase):
         self.client.post(reverse("panel:user_update", args=[self.fan.pk]), {"action": "make_staff"})
 
         self.assertTrue(self.fan.groups.filter(name=STAFF_GROUP).exists())
+
+
+    def test_analytics_revenue_is_summed_by_the_database(self):
+        order = Order.objects.create(user=self.staff, total="150.00")
+        OrderItem.objects.create(order=order, item=self.item, quantity=3, unit_price="50.00")
+        self.client.force_login(self.admin)
+        data = self.client.get(reverse("panel:analytics_data")).json()
+
+        self.assertEqual(data["totals"], {"orders": 1, "revenue": "150.00"})
+        self.assertEqual(data["best_sellers"]["values"], [3])
+
+    def test_analytics_rejects_reversed_dates(self):
+        self.client.force_login(self.admin)
+        response = self.client.get(reverse("panel:analytics_data"), {"start": "2026-11-28", "end": "2026-11-01"})
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_staff_cannot_read_analytics_data(self):
+        self.client.force_login(self.staff)
+        response = self.client.get(reverse("panel:analytics_data"))
+
+        self.assertEqual(response.status_code, 403)

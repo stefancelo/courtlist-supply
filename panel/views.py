@@ -1,8 +1,12 @@
+from datetime import timedelta
+
 from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Count, ProtectedError, Q
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
+from django.utils import timezone
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, DeleteView, ListView, TemplateView, UpdateView
@@ -12,7 +16,8 @@ from accounts.roles import STAFF_GROUP, AdminRequiredMixin
 from catalogue.models import Brand, Category, Item
 from orders.models import Order
 
-from .forms import BrandForm, CategoryForm, ItemForm
+from .analytics import build_analytics
+from .forms import AnalyticsFilterForm, BrandForm, CategoryForm, ItemForm
 
 
 # ---------- Shared building blocks ----------
@@ -61,7 +66,7 @@ class OverviewView(AdminRequiredMixin, TemplateView):
             ("Categories", Category.objects.count(), "panel:categories"),
             ("Brands", Brand.objects.count(), "panel:brands"),
             ("Users", User.objects.count(), "panel:users"),
-            ("Orders", Order.objects.count(), None),
+            ("Orders", Order.objects.count(), "panel:analytics"),
         ]
         return context
 
@@ -215,3 +220,39 @@ class UserUpdate(AdminRequiredMixin, View):
             messages.error(request, "Unknown action.")
 
         return redirect("panel:users")
+
+
+
+
+# ---------- Analytics ----------
+
+
+def default_period():
+    """The last 30 days, today included."""
+    end = timezone.localdate()
+    return {"start": end - timedelta(days=29), "end": end}
+
+
+class AnalyticsView(AdminRequiredMixin, TemplateView):
+    """The analytics page: the filters and empty charts. The numbers arrive from
+    AnalyticsData through fetch, so changing a filter doesn't reload the page."""
+
+    template_name = "panel/analytics.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["filter_form"] = AnalyticsFilterForm(initial=default_period())
+        return context
+
+
+class AnalyticsData(AdminRequiredMixin, View):
+    """JSON endpoint for the charts: reads the filters from the address and returns
+    every statistic, or the form's errors with status 400."""
+
+    def get(self, request):
+        form = AnalyticsFilterForm(request.GET or default_period())
+        if not form.is_valid():
+            messages_list = [str(error) for errors in form.errors.values() for error in errors]
+            return JsonResponse({"errors": messages_list}, status=400)
+        data = form.cleaned_data
+        return JsonResponse(build_analytics(data["start"], data["end"], data["category"]))
